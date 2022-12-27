@@ -1,5 +1,6 @@
 package com.zzezze.friendy.models;
 
+import com.zzezze.friendy.dtos.UserDto;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -49,5 +50,9 @@ public class User {
 
     public static User fake() {
         return new User(1L, new Username("username"), new Password("Password123!"), new Nickname("zzezze"));
+    }
+
+    public UserDto toDto() {
+        return new UserDto(nickname.getValue());
     }
 }
