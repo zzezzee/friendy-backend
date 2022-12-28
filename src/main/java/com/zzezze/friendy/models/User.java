@@ -36,6 +36,10 @@ public class User {
         this.nickname = nickname;
     }
 
+    public Username getUsername() {
+        return username;
+    }
+
     public Nickname getNickname() {
         return nickname;
     }
