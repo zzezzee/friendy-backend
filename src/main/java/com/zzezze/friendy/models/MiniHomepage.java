@@ -50,4 +50,9 @@ public class MiniHomepage {
                 introduction.getValue()
         );
     }
+
+    public void change(ProfileImage profileImage, Introduction introduction) {
+        this.profileImage = profileImage;
+        this.introduction = introduction;
+    }
 }
