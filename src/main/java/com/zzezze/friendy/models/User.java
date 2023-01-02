@@ -53,7 +53,7 @@ public class User {
     }
 
     public static User fake() {
-        return new User(1L, new Username("username"), new Password("Password123!"), new Nickname("zzezze"));
+        return new User(1L, new Username("test"), new Password("Password123!"), new Nickname("zzezze"));
     }
 
     public UserDto toDto() {

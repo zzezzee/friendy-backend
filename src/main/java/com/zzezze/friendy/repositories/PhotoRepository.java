@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface PhotoRepository extends JpaRepository<Photo, Long> {
     List<Photo> findAllByUsername(Username username);
+
+    Photo save(Photo photo);
 }

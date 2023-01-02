@@ -31,6 +31,12 @@ public class Photo {
         this.explanation = explanation;
     }
 
+    public Photo(Username username, Image image, Explanation explanation) {
+        this.username = username;
+        this.image = image;
+        this.explanation = explanation;
+    }
+
     public static Photo fake() {
         return new Photo(
                 1L,
@@ -46,5 +52,9 @@ public class Photo {
                 image.getValue(),
                 explanation.getValue()
         );
+    }
+
+    public Username getUsername() {
+        return username;
     }
 }

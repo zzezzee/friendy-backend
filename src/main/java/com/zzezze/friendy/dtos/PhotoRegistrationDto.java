@@ -1,23 +1,16 @@
 package com.zzezze.friendy.dtos;
 
-public class PhotoDto {
-    private Long id;
-
+public class PhotoRegistrationDto {
     private String image;
 
     private String explanation;
 
-    public PhotoDto() {
+    public PhotoRegistrationDto() {
     }
 
-    public PhotoDto(Long id, String image, String explanation) {
-        this.id = id;
+    public PhotoRegistrationDto(String image, String explanation) {
         this.image = image;
         this.explanation = explanation;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getImage() {

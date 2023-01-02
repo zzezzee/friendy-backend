@@ -107,4 +107,4 @@ dist
 .idea/
 build/
 
-application.properties
+**/application.properties
