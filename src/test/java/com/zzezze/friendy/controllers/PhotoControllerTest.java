@@ -3,6 +3,7 @@ package com.zzezze.friendy.controllers;
 import com.zzezze.friendy.applications.CreatePhotoService;
 import com.zzezze.friendy.applications.DeletePhotoService;
 import com.zzezze.friendy.applications.GetPhotosService;
+import com.zzezze.friendy.applications.PatchPhotoService;
 import com.zzezze.friendy.dtos.PhotoDeleteResponseDto;
 import com.zzezze.friendy.dtos.PhotoDto;
 import com.zzezze.friendy.dtos.PhotosDto;
@@ -25,6 +26,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,6 +41,9 @@ class PhotoControllerTest {
 
     @MockBean
     private CreatePhotoService createPhotoService;
+
+    @MockBean
+    private PatchPhotoService patchPhotoService;
 
     @MockBean
     private DeletePhotoService deletePhotoService;
@@ -101,6 +106,29 @@ class PhotoControllerTest {
                 .andExpect(status().isNoContent())
                 .andExpect(content().string(
                         containsString("\"id\"")
+                ));
+    }
+
+    @Test
+    void patch() throws Exception {
+        Username username = new Username("test");
+
+        given(patchPhotoService.patch(any(), any(), any(), any()))
+                .willReturn(Photo.fake().toDto());
+
+        String token = jwtUtil.encode(username.getValue());
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/photo-books/1")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{" +
+                                "\"id\":\"1\"," +
+                                "\"image\":\"image_address\"," +
+                                "\"explanation\":\"이미지 설명\"" +
+                                "}"))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(
+                        containsString("\"image\"")
                 ));
     }
 }

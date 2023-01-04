@@ -37,6 +37,11 @@ public class Photo {
         this.explanation = explanation;
     }
 
+    public void change(Image image, Explanation explanation) {
+        this.image = image;
+        this.explanation = explanation;
+    }
+
     public static Photo fake() {
         return new Photo(
                 1L,

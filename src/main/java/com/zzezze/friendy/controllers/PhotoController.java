@@ -3,8 +3,10 @@ package com.zzezze.friendy.controllers;
 import com.zzezze.friendy.applications.CreatePhotoService;
 import com.zzezze.friendy.applications.DeletePhotoService;
 import com.zzezze.friendy.applications.GetPhotosService;
+import com.zzezze.friendy.applications.PatchPhotoService;
 import com.zzezze.friendy.dtos.PhotoDeleteResponseDto;
 import com.zzezze.friendy.dtos.PhotoDto;
+import com.zzezze.friendy.dtos.PhotoPatchRequestDto;
 import com.zzezze.friendy.dtos.PhotoRegistrationDto;
 import com.zzezze.friendy.dtos.PhotosDto;
 import com.zzezze.friendy.models.Explanation;
@@ -15,6 +17,7 @@ import com.zzezze.friendy.utils.S3Uploader;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -31,14 +34,16 @@ public class PhotoController {
     private final GetPhotosService getPhotosService;
     private final CreatePhotoService createPhotoService;
     private final DeletePhotoService deletePhotoService;
+    private final PatchPhotoService patchPhotoService;
 
     private final S3Uploader s3Uploader;
 
-    public PhotoController(GetPhotosService getPhotosService, S3Uploader s3Uploader, CreatePhotoService createPhotoService, DeletePhotoService deletePhotoService) {
+    public PhotoController(GetPhotosService getPhotosService, S3Uploader s3Uploader, CreatePhotoService createPhotoService, DeletePhotoService deletePhotoService, PatchPhotoService patchPhotoService) {
         this.getPhotosService = getPhotosService;
         this.s3Uploader = s3Uploader;
         this.createPhotoService = createPhotoService;
         this.deletePhotoService = deletePhotoService;
+        this.patchPhotoService = patchPhotoService;
     }
 
     @GetMapping("/photo-books")
@@ -60,6 +65,21 @@ public class PhotoController {
         Explanation explanation = new Explanation(photoRegistrationDto.getExplanation());
 
         PhotoDto photoDto = createPhotoService.create(username, image, explanation);
+
+        return photoDto;
+    }
+
+    @PatchMapping("/photo-books/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public PhotoDto patch(
+            @RequestAttribute("username") Username username,
+            @RequestBody PhotoPatchRequestDto photoEditRequestDto
+    ) {
+        Long id = photoEditRequestDto.getId();
+        Image image = new Image(photoEditRequestDto.getImage());
+        Explanation explanation = new Explanation(photoEditRequestDto.getExplanation());
+
+        PhotoDto photoDto= patchPhotoService.patch(username, id, image, explanation);
 
         return photoDto;
     }
