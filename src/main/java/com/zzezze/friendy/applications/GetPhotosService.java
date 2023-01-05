@@ -3,7 +3,7 @@ package com.zzezze.friendy.applications;
 import com.zzezze.friendy.dtos.PhotoDto;
 import com.zzezze.friendy.dtos.PhotosDto;
 import com.zzezze.friendy.exceptions.UserNotFound;
-import com.zzezze.friendy.models.Nickname;
+import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.Photo;
 import com.zzezze.friendy.models.User;
 import com.zzezze.friendy.repositories.PhotoRepository;
@@ -12,17 +12,16 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class GetPhotosService {
-    private final UserRepository userRepository;
     private final PhotoRepository photoRepository;
+    private final UserRepository userRepository;
 
-    public GetPhotosService(UserRepository userRepository, PhotoRepository photoRepository) {
-        this.userRepository = userRepository;
+    public GetPhotosService(PhotoRepository photoRepository, UserRepository userRepository) {
         this.photoRepository = photoRepository;
+        this.userRepository = userRepository;
     }
 
     public PhotosDto list(Nickname nickname) {

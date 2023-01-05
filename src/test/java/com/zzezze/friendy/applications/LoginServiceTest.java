@@ -1,9 +1,9 @@
 package com.zzezze.friendy.applications;
 
 import com.zzezze.friendy.dtos.LoginResultDto;
-import com.zzezze.friendy.models.Password;
+import com.zzezze.friendy.models.value_objects.Password;
 import com.zzezze.friendy.models.User;
-import com.zzezze.friendy.models.Username;
+import com.zzezze.friendy.models.value_objects.Username;
 import com.zzezze.friendy.repositories.UserRepository;
 import com.zzezze.friendy.utils.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;

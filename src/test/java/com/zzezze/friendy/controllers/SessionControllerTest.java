@@ -2,9 +2,8 @@ package com.zzezze.friendy.controllers;
 
 import com.zzezze.friendy.applications.LoginService;
 import com.zzezze.friendy.dtos.LoginResultDto;
-import com.zzezze.friendy.models.Password;
-import com.zzezze.friendy.models.User;
-import com.zzezze.friendy.models.Username;
+import com.zzezze.friendy.models.value_objects.Password;
+import com.zzezze.friendy.models.value_objects.Username;
 import com.zzezze.friendy.utils.JwtUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.Optional;
-
 import static org.hamcrest.Matchers.containsString;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

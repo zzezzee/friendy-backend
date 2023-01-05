@@ -1,7 +1,7 @@
 package com.zzezze.friendy.applications;
 
 import com.zzezze.friendy.dtos.PhotosDto;
-import com.zzezze.friendy.models.Nickname;
+import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.Photo;
 import com.zzezze.friendy.models.User;
 import com.zzezze.friendy.repositories.PhotoRepository;
@@ -25,7 +25,7 @@ class GetPhotosServiceTest {
     void setup() {
         photoRepository = mock(PhotoRepository.class);
         userRepository = mock(UserRepository.class);
-        getPhotosService = new GetPhotosService(userRepository, photoRepository);
+        getPhotosService = new GetPhotosService(photoRepository, userRepository);
     }
 
     @Test
@@ -35,6 +35,7 @@ class GetPhotosServiceTest {
 
         given(userRepository.findByNickname(nickname))
                 .willReturn(Optional.of(user));
+
         given(photoRepository.findAllByUsername(user.getUsername()))
                 .willReturn(List.of(Photo.fake()));
 

@@ -1,8 +1,8 @@
 package com.zzezze.friendy.repositories;
 
-import com.zzezze.friendy.models.Nickname;
+import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.User;
-import com.zzezze.friendy.models.Username;
+import com.zzezze.friendy.models.value_objects.Username;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -2,11 +2,11 @@ package com.zzezze.friendy.controllers;
 
 import com.zzezze.friendy.applications.GetMiniHomepageService;
 import com.zzezze.friendy.applications.PatchMiniHomepageService;
-import com.zzezze.friendy.models.Introduction;
+import com.zzezze.friendy.models.value_objects.Introduction;
 import com.zzezze.friendy.models.MiniHomepage;
-import com.zzezze.friendy.models.Nickname;
-import com.zzezze.friendy.models.ProfileImage;
-import com.zzezze.friendy.models.Username;
+import com.zzezze.friendy.models.value_objects.Nickname;
+import com.zzezze.friendy.models.value_objects.ProfileImage;
+import com.zzezze.friendy.models.value_objects.Username;
 import com.zzezze.friendy.utils.JwtUtil;
 import com.zzezze.friendy.utils.S3Uploader;
 import org.junit.jupiter.api.Test;

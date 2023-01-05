@@ -2,10 +2,10 @@ package com.zzezze.friendy.applications;
 
 import com.zzezze.friendy.dtos.PhotoDto;
 import com.zzezze.friendy.exceptions.UserNotFound;
-import com.zzezze.friendy.models.Explanation;
-import com.zzezze.friendy.models.Image;
+import com.zzezze.friendy.models.value_objects.Explanation;
+import com.zzezze.friendy.models.value_objects.Image;
 import com.zzezze.friendy.models.Photo;
-import com.zzezze.friendy.models.Username;
+import com.zzezze.friendy.models.value_objects.Username;
 import com.zzezze.friendy.repositories.PhotoRepository;
 import com.zzezze.friendy.repositories.UserRepository;
 import jakarta.transaction.Transactional;

@@ -9,10 +9,10 @@ import com.zzezze.friendy.dtos.PhotoDto;
 import com.zzezze.friendy.dtos.PhotoPatchRequestDto;
 import com.zzezze.friendy.dtos.PhotoRegistrationDto;
 import com.zzezze.friendy.dtos.PhotosDto;
-import com.zzezze.friendy.models.Explanation;
-import com.zzezze.friendy.models.Image;
-import com.zzezze.friendy.models.Nickname;
-import com.zzezze.friendy.models.Username;
+import com.zzezze.friendy.models.value_objects.Explanation;
+import com.zzezze.friendy.models.value_objects.Image;
+import com.zzezze.friendy.models.value_objects.Nickname;
+import com.zzezze.friendy.models.value_objects.Username;
 import com.zzezze.friendy.utils.S3Uploader;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
+@RequestMapping("photos")
 public class PhotoController {
     private final GetPhotosService getPhotosService;
     private final CreatePhotoService createPhotoService;
@@ -46,7 +48,7 @@ public class PhotoController {
         this.patchPhotoService = patchPhotoService;
     }
 
-    @GetMapping("/photo-books")
+    @GetMapping
     public PhotosDto photoBook(
             @RequestParam Nickname nickname
     ) {
@@ -55,7 +57,7 @@ public class PhotoController {
         return photosDto;
     }
 
-    @PostMapping("/photo-books")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PhotoDto photo(
             @RequestAttribute("username") Username username,
@@ -69,7 +71,7 @@ public class PhotoController {
         return photoDto;
     }
 
-    @PatchMapping("/photo-books/{id}")
+    @PatchMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public PhotoDto patch(
             @RequestAttribute("username") Username username,
@@ -84,7 +86,7 @@ public class PhotoController {
         return photoDto;
     }
 
-    @DeleteMapping("/photo-books/{id}")
+    @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public PhotoDeleteResponseDto delete(
             @RequestAttribute("username") Username username,
@@ -95,7 +97,7 @@ public class PhotoController {
         return photoDeleteResponseDto;
     }
 
-    @PostMapping("/upload-photo")
+    @PostMapping("upload")
     public String upload(MultipartFile multipartFile) throws IOException {
         return s3Uploader.uploadFiles(multipartFile, "photoImage");
     }

@@ -1,9 +1,9 @@
 package com.zzezze.friendy.models;
 
+import com.zzezze.friendy.models.value_objects.Image;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class ImageTest {
     @Test

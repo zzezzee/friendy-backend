@@ -5,13 +5,12 @@ import com.zzezze.friendy.applications.DeletePhotoService;
 import com.zzezze.friendy.applications.GetPhotosService;
 import com.zzezze.friendy.applications.PatchPhotoService;
 import com.zzezze.friendy.dtos.PhotoDeleteResponseDto;
-import com.zzezze.friendy.dtos.PhotoDto;
 import com.zzezze.friendy.dtos.PhotosDto;
-import com.zzezze.friendy.models.Explanation;
-import com.zzezze.friendy.models.Image;
-import com.zzezze.friendy.models.Nickname;
+import com.zzezze.friendy.models.value_objects.Explanation;
+import com.zzezze.friendy.models.value_objects.Image;
+import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.Photo;
-import com.zzezze.friendy.models.Username;
+import com.zzezze.friendy.models.value_objects.Username;
 import com.zzezze.friendy.utils.JwtUtil;
 import com.zzezze.friendy.utils.S3Uploader;
 import org.junit.jupiter.api.Test;
@@ -60,7 +59,7 @@ class PhotoControllerTest {
         given(getPhotosService.list(nickname))
                 .willReturn(new PhotosDto(List.of(Photo.fake().toDto())));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/photo-books?nickname=zzezze"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/photos?nickname=zzezze"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("\"photos\"")
@@ -78,7 +77,7 @@ class PhotoControllerTest {
 
         String token = jwtUtil.encode(username.getValue());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/photo-books")
+        mockMvc.perform(MockMvcRequestBuilders.post("/photos")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{" +
@@ -100,7 +99,7 @@ class PhotoControllerTest {
 
         String token = jwtUtil.encode(username.getValue());
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/photo-books/1")
+        mockMvc.perform(MockMvcRequestBuilders.delete("/photos/1")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
@@ -118,7 +117,7 @@ class PhotoControllerTest {
 
         String token = jwtUtil.encode(username.getValue());
 
-        mockMvc.perform(MockMvcRequestBuilders.patch("/photo-books/1")
+        mockMvc.perform(MockMvcRequestBuilders.patch("/photos/1")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{" +

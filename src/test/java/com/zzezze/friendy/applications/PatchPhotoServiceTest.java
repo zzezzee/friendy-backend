@@ -1,11 +1,11 @@
 package com.zzezze.friendy.applications;
 
 import com.zzezze.friendy.dtos.PhotoDto;
-import com.zzezze.friendy.models.Explanation;
-import com.zzezze.friendy.models.Image;
+import com.zzezze.friendy.models.value_objects.Explanation;
+import com.zzezze.friendy.models.value_objects.Image;
 import com.zzezze.friendy.models.Photo;
 import com.zzezze.friendy.models.User;
-import com.zzezze.friendy.models.Username;
+import com.zzezze.friendy.models.value_objects.Username;
 import com.zzezze.friendy.repositories.PhotoRepository;
 import com.zzezze.friendy.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willReturn;
@@ -30,7 +29,7 @@ class PatchPhotoServiceTest {
     void setup() {
         photoRepository = mock(PhotoRepository.class);
         userRepository = mock(UserRepository.class);
-        patchPhotoService = new PatchPhotoService(userRepository, photoRepository);
+        patchPhotoService = new PatchPhotoService(photoRepository, userRepository);
     }
 
     @Test

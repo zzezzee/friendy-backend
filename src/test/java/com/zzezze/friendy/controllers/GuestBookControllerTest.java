@@ -1,48 +1,44 @@
 package com.zzezze.friendy.controllers;
 
-import com.zzezze.friendy.applications.GetUserService;
-import com.zzezze.friendy.models.User;
+import com.zzezze.friendy.applications.GetGuestBooksService;
+import com.zzezze.friendy.dtos.GuestBooksDto;
+import com.zzezze.friendy.models.GuestBook;
+import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.value_objects.Username;
-import com.zzezze.friendy.utils.JwtUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(UserController.class)
-class UserControllerTest {
+@WebMvcTest(GuestBookController.class)
+class GuestBookControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private GetUserService getUserService;
-
-    @SpyBean
-    private JwtUtil jwtUtil;
+    private GetGuestBooksService getGuestBooksService;
 
     @Test
-    void user() throws Exception {
-        Username username = new Username("zzezze");
+    void list() throws Exception {
+        Username username = new Username("test");
+        Nickname nickname = new Nickname("zzezze");
 
-        given(getUserService.detail(username))
-                .willReturn(User.fake().toDto());
+        given(getGuestBooksService.list(nickname))
+                .willReturn(new GuestBooksDto(List.of(GuestBook.fake(username).toDto())));
 
-        String token = jwtUtil.encode(username.getValue());
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/users/me")
-                        .header("Authorization", "Bearer " + token)
-                )
+        mockMvc.perform(MockMvcRequestBuilders.get("/guest-books?nickname=zzezze"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
-                        containsString("\"nickname\":\"zzezze\"")
+                        containsString("\"guestBooks\"")
                 ));
     }
 }

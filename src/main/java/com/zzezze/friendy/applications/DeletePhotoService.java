@@ -7,7 +7,7 @@ import com.zzezze.friendy.exceptions.PhotoNotFound;
 import com.zzezze.friendy.exceptions.UserNotFound;
 import com.zzezze.friendy.models.Photo;
 import com.zzezze.friendy.models.User;
-import com.zzezze.friendy.models.Username;
+import com.zzezze.friendy.models.value_objects.Username;
 import com.zzezze.friendy.repositories.PhotoRepository;
 import com.zzezze.friendy.repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -16,12 +16,12 @@ import org.springframework.stereotype.Service;
 @Service
 @Transactional
 public class DeletePhotoService {
-    private final UserRepository userRepository;
     private final PhotoRepository photoRepository;
+    private final UserRepository userRepository;
 
-    public DeletePhotoService(UserRepository userRepository, PhotoRepository photoRepository) {
-        this.userRepository = userRepository;
+    public DeletePhotoService(PhotoRepository photoRepository, UserRepository userRepository) {
         this.photoRepository = photoRepository;
+        this.userRepository = userRepository;
     }
 
     public PhotoDeleteResponseDto delete(Username username, Long id) {

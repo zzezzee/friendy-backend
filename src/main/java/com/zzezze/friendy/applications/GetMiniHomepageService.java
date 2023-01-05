@@ -4,7 +4,7 @@ import com.zzezze.friendy.dtos.MiniHomepageDto;
 import com.zzezze.friendy.exceptions.MiniHomepageNotFound;
 import com.zzezze.friendy.exceptions.UserNotFound;
 import com.zzezze.friendy.models.MiniHomepage;
-import com.zzezze.friendy.models.Nickname;
+import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.User;
 import com.zzezze.friendy.repositories.MiniHomepageRepository;
 import com.zzezze.friendy.repositories.UserRepository;

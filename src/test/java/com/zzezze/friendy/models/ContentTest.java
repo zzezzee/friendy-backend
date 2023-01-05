@@ -1,16 +1,17 @@
 package com.zzezze.friendy.models;
 
+import com.zzezze.friendy.models.value_objects.Content;
 import com.zzezze.friendy.models.value_objects.Nickname;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class NicknameTest {
+class ContentTest {
     @Test
     void equality() {
-        Nickname writer1 = new Nickname("zzezze");
-        Nickname writer2 = new Nickname("zzezze");
+        Content content1 = new Content("내용");
+        Content content2 = new Content("내용");
 
-        assertThat(writer1).isEqualTo(writer2);
+        assertThat(content1).isEqualTo(content2);
     }
 }

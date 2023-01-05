@@ -2,9 +2,8 @@ package com.zzezze.friendy.applications;
 
 import com.zzezze.friendy.dtos.MiniHomepageDto;
 import com.zzezze.friendy.models.MiniHomepage;
-import com.zzezze.friendy.models.Nickname;
+import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.User;
-import com.zzezze.friendy.models.Username;
 import com.zzezze.friendy.repositories.MiniHomepageRepository;
 import com.zzezze.friendy.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;

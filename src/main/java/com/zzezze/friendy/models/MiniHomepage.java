@@ -1,12 +1,18 @@
 package com.zzezze.friendy.models;
 
 import com.zzezze.friendy.dtos.MiniHomepageDto;
+import com.zzezze.friendy.models.value_objects.Introduction;
+import com.zzezze.friendy.models.value_objects.Nickname;
+import com.zzezze.friendy.models.value_objects.ProfileImage;
+import com.zzezze.friendy.models.value_objects.Username;
+import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
+@Embeddable
 public class MiniHomepage {
     @Id
     @GeneratedValue

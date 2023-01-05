@@ -2,7 +2,7 @@ package com.zzezze.friendy.interceptors;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.zzezze.friendy.exceptions.AuthenticationError;
-import com.zzezze.friendy.models.Username;
+import com.zzezze.friendy.models.value_objects.Username;
 import com.zzezze.friendy.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

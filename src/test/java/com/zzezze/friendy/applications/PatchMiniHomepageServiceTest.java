@@ -1,10 +1,10 @@
 package com.zzezze.friendy.applications;
 
 import com.zzezze.friendy.dtos.MiniHomepageDto;
-import com.zzezze.friendy.models.Introduction;
+import com.zzezze.friendy.models.value_objects.Introduction;
 import com.zzezze.friendy.models.MiniHomepage;
-import com.zzezze.friendy.models.ProfileImage;
-import com.zzezze.friendy.models.Username;
+import com.zzezze.friendy.models.value_objects.ProfileImage;
+import com.zzezze.friendy.models.value_objects.Username;
 import com.zzezze.friendy.repositories.MiniHomepageRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 

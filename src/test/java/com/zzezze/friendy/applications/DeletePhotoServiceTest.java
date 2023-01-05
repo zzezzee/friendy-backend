@@ -2,13 +2,11 @@ package com.zzezze.friendy.applications;
 
 import com.zzezze.friendy.models.Photo;
 import com.zzezze.friendy.models.User;
-import com.zzezze.friendy.models.Username;
+import com.zzezze.friendy.models.value_objects.Username;
 import com.zzezze.friendy.repositories.PhotoRepository;
 import com.zzezze.friendy.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import javax.swing.text.html.Option;
 
 import java.util.Optional;
 
@@ -26,7 +24,7 @@ class DeletePhotoServiceTest {
     void setup() {
         photoRepository = mock(PhotoRepository.class);
         userRepository = mock(UserRepository.class);
-        deletePhotoService = new DeletePhotoService(userRepository, photoRepository);
+        deletePhotoService = new DeletePhotoService(photoRepository, userRepository);
     }
 
     @Test

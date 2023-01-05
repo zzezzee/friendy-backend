@@ -1,4 +1,4 @@
-package com.zzezze.friendy.models;
+package com.zzezze.friendy.models.value_objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -6,14 +6,14 @@ import jakarta.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class Image {
-    @Column(name = "image")
+public class Introduction {
+    @Column(name = "introduction")
     private String value;
 
-    public Image() {
+    public Introduction() {
     }
 
-    public Image(String value) {
+    public Introduction(String value) {
         this.value = value;
     }
 
@@ -25,8 +25,8 @@ public class Image {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Image image = (Image) o;
-        return Objects.equals(value, image.value);
+        Introduction that = (Introduction) o;
+        return Objects.equals(value, that.value);
     }
 
     @Override
