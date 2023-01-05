@@ -1,10 +1,12 @@
 package com.zzezze.friendy.controllers;
 
 import com.zzezze.friendy.applications.GetGuestBooksService;
+import com.zzezze.friendy.applications.GetGuestBookService;
 import com.zzezze.friendy.dtos.GuestBookDto;
 import com.zzezze.friendy.dtos.GuestBooksDto;
 import com.zzezze.friendy.models.value_objects.Nickname;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,10 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("guest-books")
 public class GuestBookController {
     private final GetGuestBooksService getGuestBooksService;
-    private GuestBookService getGuestBookService;
+    private final GetGuestBookService getGuestBookService;
 
-    public GuestBookController(GetGuestBooksService getGuestBooksService) {
+    public GuestBookController(GetGuestBooksService getGuestBooksService, GetGuestBookService getGuestBookService) {
         this.getGuestBooksService = getGuestBooksService;
+        this.getGuestBookService = getGuestBookService;
     }
 
     @GetMapping
@@ -28,11 +31,11 @@ public class GuestBookController {
         return guestBooksDto;
     }
 
-    @GetMapping
+    @GetMapping("{id}")
     public GuestBookDto guestBook(
-            @RequestParam Nickname nickname
+            @PathVariable Long id
     ) {
-        GuestBookDto guestBookDto = getGuestBookService.list(nickname);
+        GuestBookDto guestBookDto = getGuestBookService.guestBook(id);
 
         return guestBookDto;
     }

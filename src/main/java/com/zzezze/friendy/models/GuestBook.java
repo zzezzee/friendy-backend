@@ -49,6 +49,16 @@ public class GuestBook {
         );
     }
 
+    public static GuestBook fake() {
+        return new GuestBook(
+                1L,
+                new Username("test1"),
+                new Content("내용"),
+                new Writer("writer"),
+                new ProfileImage("image_address")
+        );
+    }
+
     public GuestBookDto toDto() {
         return new GuestBookDto(
                 id,

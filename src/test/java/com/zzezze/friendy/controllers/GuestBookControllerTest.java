@@ -1,6 +1,8 @@
 package com.zzezze.friendy.controllers;
 
+import com.zzezze.friendy.applications.GetGuestBookService;
 import com.zzezze.friendy.applications.GetGuestBooksService;
+import com.zzezze.friendy.dtos.GuestBookDto;
 import com.zzezze.friendy.dtos.GuestBooksDto;
 import com.zzezze.friendy.models.GuestBook;
 import com.zzezze.friendy.models.value_objects.Nickname;
@@ -27,6 +29,9 @@ class GuestBookControllerTest {
     @MockBean
     private GetGuestBooksService getGuestBooksService;
 
+    @MockBean
+    private GetGuestBookService getGuestBookService;
+
     @Test
     void list() throws Exception {
         Username username = new Username("test");
@@ -39,6 +44,21 @@ class GuestBookControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("\"guestBooks\"")
+                ));
+    }
+
+    @Test
+    void guestBook() throws Exception {
+        Username username = new Username("test");
+        Nickname nickname = new Nickname("zzezze");
+
+        given(getGuestBookService.guestBook(1L))
+                .willReturn(GuestBook.fake(username).toDto());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/guest-books/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("\"profileImage\"")
                 ));
     }
 }

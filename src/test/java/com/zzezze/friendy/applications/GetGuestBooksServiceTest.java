@@ -33,7 +33,7 @@ class GetGuestBooksServiceTest {
     void list() {
         Nickname nickname = new Nickname("zzezze");
 
-        User user = User.fake();
+         User user = User.fake();
 
         given(userRepository.findByNickname(nickname))
                 .willReturn(Optional.of(user));
@@ -43,7 +43,6 @@ class GetGuestBooksServiceTest {
 
         GuestBooksDto guestBooksDto = getGuestBookService.list(nickname);
 
-        System.out.println(guestBooksDto);
         assertThat(guestBooksDto.getGuestBooks().size()).isEqualTo(1);
     }
 }
