@@ -39,6 +39,14 @@ public class GuestBook {
         this.profileImage = profileImage;
     }
 
+    public Username getUsername() {
+        return username;
+    }
+
+    public Writer getWriter() {
+        return writer;
+    }
+
     public static GuestBook fake(Username username) {
         return new GuestBook(
                 1L,
@@ -52,7 +60,7 @@ public class GuestBook {
     public static GuestBook fake() {
         return new GuestBook(
                 1L,
-                new Username("test1"),
+                new Username("test"),
                 new Content("내용"),
                 new Writer("writer"),
                 new ProfileImage("image_address")

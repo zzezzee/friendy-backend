@@ -1,8 +1,10 @@
 package com.zzezze.friendy.applications;
 
+import com.zzezze.friendy.models.GuestBook;
 import com.zzezze.friendy.models.Photo;
 import com.zzezze.friendy.models.User;
 import com.zzezze.friendy.models.value_objects.Username;
+import com.zzezze.friendy.repositories.GuestBookRepository;
 import com.zzezze.friendy.repositories.PhotoRepository;
 import com.zzezze.friendy.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,21 +12,21 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-class DeletePhotoServiceTest {
-    PhotoRepository photoRepository;
+class DeleteGuestBookServiceTest {
+    GuestBookRepository guestBookRepository;
     UserRepository userRepository;
-    DeletePhotoService deletePhotoService;
+    DeleteGuestBookService deleteGuestBookService;
 
     @BeforeEach
     void setup() {
-        photoRepository = mock(PhotoRepository.class);
+        guestBookRepository = mock(GuestBookRepository.class);
         userRepository = mock(UserRepository.class);
-        deletePhotoService = new DeletePhotoService(photoRepository, userRepository);
+        deleteGuestBookService = new DeleteGuestBookService(guestBookRepository, userRepository);
     }
 
     @Test
@@ -34,12 +36,12 @@ class DeletePhotoServiceTest {
         given(userRepository.findByUsername(username))
                 .willReturn(Optional.of(User.fake()));
 
-        given(photoRepository.findById(1L))
-                .willReturn(Optional.of(Photo.fake()));
+        given(guestBookRepository.findById(1L))
+                .willReturn(Optional.of(GuestBook.fake()));
 
-        deletePhotoService.delete(username, 1L);
+        deleteGuestBookService.delete(username, 1L);
 
-        verify(photoRepository).findById(1L);
-        verify(photoRepository).deleteById(1L);
+        verify(guestBookRepository).findById(1L);
+        verify(guestBookRepository).deleteById(1L);
     }
 }
