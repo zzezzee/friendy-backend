@@ -1,11 +1,16 @@
 package com.zzezze.friendy.controllers;
 
+import com.zzezze.friendy.applications.CreateGuestBookService;
 import com.zzezze.friendy.applications.DeleteGuestBookService;
 import com.zzezze.friendy.applications.GetGuestBookService;
 import com.zzezze.friendy.applications.GetGuestBooksService;
 import com.zzezze.friendy.dtos.GuestBookDeleteResponseDto;
 import com.zzezze.friendy.dtos.GuestBooksDto;
 import com.zzezze.friendy.models.GuestBook;
+import com.zzezze.friendy.models.Photo;
+import com.zzezze.friendy.models.value_objects.Content;
+import com.zzezze.friendy.models.value_objects.Explanation;
+import com.zzezze.friendy.models.value_objects.Image;
 import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.value_objects.ProfileImage;
 import com.zzezze.friendy.models.value_objects.Username;
@@ -23,6 +28,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,6 +43,9 @@ class GuestBookControllerTest {
 
     @MockBean
     private GetGuestBookService getGuestBookService;
+
+    @MockBean
+    private CreateGuestBookService createGuestBookService;
 
     @MockBean
     private DeleteGuestBookService deleteGuestBookService;
@@ -73,6 +82,31 @@ class GuestBookControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("\"nickname\"")
+                ));
+    }
+
+    @Test
+    void create() throws Exception {
+        Username username = new Username("test");
+        Content content = new Content("방명록 내용");
+        Nickname miniHomepageOwner = new Nickname("미니홈피 주인 닉네임");
+        ProfileImage profileImage = new ProfileImage("image_address");
+
+        given(createGuestBookService.create(username, content, miniHomepageOwner))
+                .willReturn(GuestBook.fake().toDto(miniHomepageOwner, profileImage));
+
+        String token = jwtUtil.encode(username.getValue());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/guest-books")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{" +
+                                "\"content\":\"방명록 내용\"," +
+                                "\"nickname\":\"미니홈피 주인 닉네임\"" +
+                                "}"))
+                .andExpect(status().isCreated())
+                .andExpect(content().string(
+                        containsString("\"writer\"")
                 ));
     }
 

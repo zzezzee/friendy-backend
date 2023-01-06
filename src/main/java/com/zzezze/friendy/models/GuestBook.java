@@ -39,12 +39,22 @@ public class GuestBook {
         this.writer = writer;
     }
 
+    public GuestBook(Username username, Username writer, Content content) {
+        this.username = username;
+        this.writer = writer;
+        this.content = content;
+    }
+
     public Username getUsername() {
         return username;
     }
 
     public Username getWriter() {
         return writer;
+    }
+
+    public static GuestBook of(Username writer, Username username, Content content) {
+        return new GuestBook(username, writer, content);
     }
 
     public static GuestBook fake(Username username) {
