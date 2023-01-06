@@ -1,8 +1,5 @@
 package com.zzezze.friendy.models;
 
-import com.zzezze.friendy.models.value_objects.Writer;
-import org.junit.jupiter.api.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class WriterTest {

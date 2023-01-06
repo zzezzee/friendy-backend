@@ -1,14 +1,14 @@
 package com.zzezze.friendy.dtos;
 
-public class MiniHomepageEditDto {
+public class UserProfilePatchRequestDto {
     private String profileImage;
 
     private String introduction;
 
-    public MiniHomepageEditDto() {
+    public UserProfilePatchRequestDto() {
     }
 
-    public MiniHomepageEditDto(String profileImage, String introduction) {
+    public UserProfilePatchRequestDto(String profileImage, String introduction) {
         this.profileImage = profileImage;
         this.introduction = introduction;
     }
