@@ -32,7 +32,7 @@ public class GuestBook {
     public GuestBook() {
     }
 
-    public GuestBook(Long id, Username username, Content content, Username writer) {
+    public GuestBook(Long id, Username username, Username writer, Content content) {
         this.id = id;
         this.username = username;
         this.content = content;
@@ -45,6 +45,10 @@ public class GuestBook {
         this.content = content;
     }
 
+    public static GuestBook of(Username writer, Username username, Content content) {
+        return new GuestBook(username, writer, content);
+    }
+
     public Username getUsername() {
         return username;
     }
@@ -53,16 +57,12 @@ public class GuestBook {
         return writer;
     }
 
-    public static GuestBook of(Username writer, Username username, Content content) {
-        return new GuestBook(username, writer, content);
-    }
-
     public static GuestBook fake(Username username) {
         return new GuestBook(
                 1L,
                 username,
-                new Content("내용"),
-                new Username("test2")
+                new Username("test2"),
+                new Content("내용")
         );
     }
 
@@ -70,8 +70,8 @@ public class GuestBook {
         return new GuestBook(
                 1L,
                 new Username("test"),
-                new Content("내용"),
-                new Username("test2")
+                new Username("test2"),
+                new Content("내용")
         );
     }
 
@@ -84,5 +84,9 @@ public class GuestBook {
                 nickname.getValue(),
                 profileImage.getValue()
         );
+    }
+
+    public void change(Content content) {
+        this.content = content;
     }
 }

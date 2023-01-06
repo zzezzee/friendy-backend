@@ -4,13 +4,12 @@ import com.zzezze.friendy.applications.CreateGuestBookService;
 import com.zzezze.friendy.applications.DeleteGuestBookService;
 import com.zzezze.friendy.applications.GetGuestBookService;
 import com.zzezze.friendy.applications.GetGuestBooksService;
+import com.zzezze.friendy.applications.PatchGuestBookService;
 import com.zzezze.friendy.dtos.GuestBookDeleteResponseDto;
+import com.zzezze.friendy.dtos.GuestBookPatchResponseDto;
 import com.zzezze.friendy.dtos.GuestBooksDto;
 import com.zzezze.friendy.models.GuestBook;
-import com.zzezze.friendy.models.Photo;
 import com.zzezze.friendy.models.value_objects.Content;
-import com.zzezze.friendy.models.value_objects.Explanation;
-import com.zzezze.friendy.models.value_objects.Image;
 import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.value_objects.ProfileImage;
 import com.zzezze.friendy.models.value_objects.Username;
@@ -21,7 +20,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.parameters.P;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -49,6 +47,9 @@ class GuestBookControllerTest {
 
     @MockBean
     private DeleteGuestBookService deleteGuestBookService;
+
+    @MockBean
+    private PatchGuestBookService patchGuestBookService;
 
     @SpyBean
     private JwtUtil jwtUtil;
@@ -108,6 +109,33 @@ class GuestBookControllerTest {
                 .andExpect(content().string(
                         containsString("\"writer\"")
                 ));
+    }
+
+    @Test
+    void patch() throws Exception {
+        Username username = new Username("test");
+        Content content = new Content("방명록 내용");
+        Long id = 1L;
+        Nickname miniHomepageOwner = new Nickname("미니홈피 주인 닉네임");
+        ProfileImage profileImage = new ProfileImage("image_address");
+
+        given(patchGuestBookService.patch(username, id, content))
+                .willReturn(new GuestBookPatchResponseDto(id));
+
+        String token = jwtUtil.encode(username.getValue());
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/guest-books/1")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{" +
+                                "\"id\":\"1\"," +
+                                "\"content\":\"방명록 내용\"" +
+                                "}"))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(
+                        containsString("\"id\"")
+                ));
+
     }
 
     @Test

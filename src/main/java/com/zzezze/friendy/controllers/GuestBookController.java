@@ -4,8 +4,11 @@ import com.zzezze.friendy.applications.CreateGuestBookService;
 import com.zzezze.friendy.applications.DeleteGuestBookService;
 import com.zzezze.friendy.applications.GetGuestBookService;
 import com.zzezze.friendy.applications.GetGuestBooksService;
+import com.zzezze.friendy.applications.PatchGuestBookService;
 import com.zzezze.friendy.dtos.GuestBookDeleteResponseDto;
 import com.zzezze.friendy.dtos.GuestBookDto;
+import com.zzezze.friendy.dtos.GuestBookPatchRequestDto;
+import com.zzezze.friendy.dtos.GuestBookPatchResponseDto;
 import com.zzezze.friendy.dtos.GuestBookRegistrationDto;
 import com.zzezze.friendy.dtos.GuestBooksDto;
 import com.zzezze.friendy.models.value_objects.Content;
@@ -14,6 +17,7 @@ import com.zzezze.friendy.models.value_objects.Username;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -30,12 +34,14 @@ public class GuestBookController {
     private final GetGuestBookService getGuestBookService;
     private final DeleteGuestBookService deleteGuestBookService;
     private final CreateGuestBookService createGuestBookService;
+    private final PatchGuestBookService patchGuestBookService;
 
-    public GuestBookController(GetGuestBooksService getGuestBooksService, GetGuestBookService getGuestBookService, DeleteGuestBookService deleteGuestBookService, CreateGuestBookService createGuestBookService) {
+    public GuestBookController(GetGuestBooksService getGuestBooksService, GetGuestBookService getGuestBookService, DeleteGuestBookService deleteGuestBookService, CreateGuestBookService createGuestBookService, PatchGuestBookService patchGuestBookService) {
         this.getGuestBooksService = getGuestBooksService;
         this.getGuestBookService = getGuestBookService;
         this.deleteGuestBookService = deleteGuestBookService;
         this.createGuestBookService = createGuestBookService;
+        this.patchGuestBookService = patchGuestBookService;
     }
 
     @GetMapping
@@ -70,13 +76,27 @@ public class GuestBookController {
         return guestBook;
     }
 
+    @PatchMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public GuestBookPatchResponseDto patch(
+            @RequestAttribute("username") Username username,
+            @RequestBody GuestBookPatchRequestDto guestBookPatchRequestDto
+    ) {
+        Long id = guestBookPatchRequestDto.getId();
+        Content content = new Content(guestBookPatchRequestDto.getContent());
+
+        GuestBookPatchResponseDto guestBookPatchResponseDto = patchGuestBookService.patch(username, id, content);
+
+        return guestBookPatchResponseDto;
+    }
+
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public GuestBookDeleteResponseDto delete(
             @RequestAttribute("username") Username username,
             @PathVariable Long id
     ) {
-        GuestBookDeleteResponseDto guestBookDeleteResponseDto= deleteGuestBookService.delete(username, id);
+        GuestBookDeleteResponseDto guestBookDeleteResponseDto = deleteGuestBookService.delete(username, id);
 
         return guestBookDeleteResponseDto;
     }
