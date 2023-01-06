@@ -2,9 +2,11 @@ package com.zzezze.friendy.models;
 
 import com.zzezze.friendy.dtos.GuestBookDto;
 import com.zzezze.friendy.models.value_objects.Content;
+import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.value_objects.ProfileImage;
 import com.zzezze.friendy.models.value_objects.Username;
-import com.zzezze.friendy.models.value_objects.Writer;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,33 +19,31 @@ public class GuestBook {
     private Long id;
 
     @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "owner"))
     private Username username;
 
     @Embedded
-    private Writer writer;
+    @AttributeOverride(name = "value", column = @Column(name = "writer"))
+    private Username writer;
 
     @Embedded
     private Content content;
 
-    @Embedded
-    private ProfileImage profileImage;
-
     public GuestBook() {
     }
 
-    public GuestBook(Long id, Username username, Content content, Writer writer, ProfileImage profileImage) {
+    public GuestBook(Long id, Username username, Content content, Username writer) {
         this.id = id;
         this.username = username;
         this.content = content;
         this.writer = writer;
-        this.profileImage = profileImage;
     }
 
     public Username getUsername() {
         return username;
     }
 
-    public Writer getWriter() {
+    public Username getWriter() {
         return writer;
     }
 
@@ -52,8 +52,7 @@ public class GuestBook {
                 1L,
                 username,
                 new Content("내용"),
-                new Writer("writer"),
-                new ProfileImage("image_address")
+                new Username("test2")
         );
     }
 
@@ -62,17 +61,17 @@ public class GuestBook {
                 1L,
                 new Username("test"),
                 new Content("내용"),
-                new Writer("writer"),
-                new ProfileImage("image_address")
+                new Username("test2")
         );
     }
 
-    public GuestBookDto toDto() {
+    public GuestBookDto toDto(Nickname nickname, ProfileImage profileImage) {
         return new GuestBookDto(
                 id,
                 username.getValue(),
                 writer.getValue(),
                 content.getValue(),
+                nickname.getValue(),
                 profileImage.getValue()
         );
     }

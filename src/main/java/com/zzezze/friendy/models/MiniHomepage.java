@@ -41,6 +41,14 @@ public class MiniHomepage {
         this.introduction = introduction;
     }
 
+    public Nickname getNickname() {
+        return nickname;
+    }
+
+    public ProfileImage getProfileImage() {
+        return profileImage;
+    }
+
     public static MiniHomepage fake() {
         return new MiniHomepage(1L,
                 new Username("test"),

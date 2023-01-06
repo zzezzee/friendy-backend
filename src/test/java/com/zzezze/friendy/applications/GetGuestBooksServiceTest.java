@@ -2,10 +2,11 @@ package com.zzezze.friendy.applications;
 
 import com.zzezze.friendy.dtos.GuestBooksDto;
 import com.zzezze.friendy.models.GuestBook;
+import com.zzezze.friendy.models.MiniHomepage;
 import com.zzezze.friendy.models.User;
 import com.zzezze.friendy.models.value_objects.Nickname;
-import com.zzezze.friendy.models.value_objects.Username;
 import com.zzezze.friendy.repositories.GuestBookRepository;
+import com.zzezze.friendy.repositories.MiniHomepageRepository;
 import com.zzezze.friendy.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,12 +22,14 @@ class GetGuestBooksServiceTest {
     GetGuestBooksService getGuestBookService;
     GuestBookRepository guestBookRepository;
     UserRepository userRepository;
+    MiniHomepageRepository miniHomepageRepository;
 
     @BeforeEach
     void setup() {
         userRepository = mock(UserRepository.class);
         guestBookRepository = mock(GuestBookRepository.class);
-        getGuestBookService = new GetGuestBooksService(guestBookRepository, userRepository);
+        miniHomepageRepository = mock(MiniHomepageRepository.class);
+        getGuestBookService = new GetGuestBooksService(guestBookRepository, userRepository, miniHomepageRepository);
     }
 
     @Test
@@ -38,8 +41,14 @@ class GetGuestBooksServiceTest {
         given(userRepository.findByNickname(nickname))
                 .willReturn(Optional.of(user));
 
+
+        GuestBook guestBook = GuestBook.fake(user.getUsername());
+
         given(guestBookRepository.findAllByUsername(user.getUsername()))
-                .willReturn(List.of(GuestBook.fake(user.getUsername())));
+                .willReturn(List.of(guestBook));
+
+        given(miniHomepageRepository.findByUsername(guestBook.getWriter()))
+                .willReturn(Optional.of(MiniHomepage.fake()));
 
         GuestBooksDto guestBooksDto = getGuestBookService.list(nickname);
 

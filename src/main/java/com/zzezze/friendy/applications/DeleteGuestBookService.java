@@ -28,14 +28,11 @@ public class DeleteGuestBookService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(UserNotFound::new);
 
-        Nickname userNickname = user.getNickname();
-
         GuestBook guestBook = guestBookRepository.findById(id)
                 .orElseThrow(GuestBookNouFound::new);
 
-        // 글을 쓴 사람이 글 주인이거나 미니홈피 주인이이 아니면 예외처리
         if (!guestBook.getUsername().equals(user.getUsername())
-                && !guestBook.getWriter().getValue().equals(userNickname.getValue())) {
+                && !guestBook.getWriter().getValue().equals(user.getUsername().getValue())) {
             throw new GuestBookDeleteFailed();
         }
 

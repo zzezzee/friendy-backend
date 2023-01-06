@@ -1,5 +1,6 @@
 package com.zzezze.friendy.models.value_objects;
 
+import com.zzezze.friendy.models.dtos.WriterDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
@@ -7,7 +8,7 @@ import java.util.Objects;
 
 @Embeddable
 public class Writer {
-    @Column(name = "writer")
+    @Column(name = "writer_username")
     private String value;
 
     public Writer() {

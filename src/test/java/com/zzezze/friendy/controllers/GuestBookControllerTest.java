@@ -4,11 +4,10 @@ import com.zzezze.friendy.applications.DeleteGuestBookService;
 import com.zzezze.friendy.applications.GetGuestBookService;
 import com.zzezze.friendy.applications.GetGuestBooksService;
 import com.zzezze.friendy.dtos.GuestBookDeleteResponseDto;
-import com.zzezze.friendy.dtos.GuestBookDto;
 import com.zzezze.friendy.dtos.GuestBooksDto;
-import com.zzezze.friendy.dtos.PhotoDeleteResponseDto;
 import com.zzezze.friendy.models.GuestBook;
 import com.zzezze.friendy.models.value_objects.Nickname;
+import com.zzezze.friendy.models.value_objects.ProfileImage;
 import com.zzezze.friendy.models.value_objects.Username;
 import com.zzezze.friendy.utils.JwtUtil;
 import org.junit.jupiter.api.Test;
@@ -17,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.parameters.P;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -48,9 +48,10 @@ class GuestBookControllerTest {
     void list() throws Exception {
         Username username = new Username("test");
         Nickname nickname = new Nickname("zzezze");
+        ProfileImage profileImage = new ProfileImage("image_address");
 
         given(getGuestBooksService.list(nickname))
-                .willReturn(new GuestBooksDto(List.of(GuestBook.fake(username).toDto())));
+                .willReturn(new GuestBooksDto(List.of(GuestBook.fake(username).toDto(nickname, profileImage))));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/guest-books?nickname=zzezze"))
                 .andExpect(status().isOk())
@@ -63,14 +64,15 @@ class GuestBookControllerTest {
     void guestBook() throws Exception {
         Username username = new Username("test");
         Nickname nickname = new Nickname("zzezze");
+        ProfileImage profileImage = new ProfileImage("image_address");
 
         given(getGuestBookService.guestBook(1L))
-                .willReturn(GuestBook.fake(username).toDto());
+                .willReturn(GuestBook.fake(username).toDto(nickname, profileImage));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/guest-books/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
-                        containsString("\"profileImage\"")
+                        containsString("\"nickname\"")
                 ));
     }
 

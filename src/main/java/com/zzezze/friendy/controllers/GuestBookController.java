@@ -1,8 +1,8 @@
 package com.zzezze.friendy.controllers;
 
 import com.zzezze.friendy.applications.DeleteGuestBookService;
-import com.zzezze.friendy.applications.GetGuestBooksService;
 import com.zzezze.friendy.applications.GetGuestBookService;
+import com.zzezze.friendy.applications.GetGuestBooksService;
 import com.zzezze.friendy.dtos.GuestBookDeleteResponseDto;
 import com.zzezze.friendy.dtos.GuestBookDto;
 import com.zzezze.friendy.dtos.GuestBooksDto;
@@ -48,6 +48,17 @@ public class GuestBookController {
 
         return guestBookDto;
     }
+
+//    @PostMapping
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public GuestBook create(
+//            @RequestAttribute("username") Username username,
+//            @RequestBody GuestBookRegistrationDto guestBookRegistrationDto
+//    ) {
+//        GuestBook guestBook = createPhotoService.create(username, image, explanation);
+//
+//        return guestBook;
+//    }
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
