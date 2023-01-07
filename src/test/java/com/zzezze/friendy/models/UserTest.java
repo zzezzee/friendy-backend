@@ -10,6 +10,6 @@ class UserTest {
     void create() {
         User user = User.fake();
 
-        assertThat(user.getNickname().getValue()).isEqualTo("zzezze");
+        assertThat(user.getUsername().getValue()).isEqualTo("test");
     }
 }

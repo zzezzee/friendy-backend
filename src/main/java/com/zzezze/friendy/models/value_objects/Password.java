@@ -1,4 +1,4 @@
-package com.zzezze.friendy.models;
+package com.zzezze.friendy.models.value_objects;
 
 import com.zzezze.friendy.exceptions.PasswordDoNotMatches;
 import jakarta.persistence.Column;
