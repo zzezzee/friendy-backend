@@ -87,6 +87,16 @@ public class User {
         );
     }
 
+    public static User fake(Username username) {
+        return new User(1L,
+                username,
+                new Password("Password123!"),
+                new Nickname("zzezze"),
+                new ProfileImage("image_address"),
+                new Introduction("미니홈피 소개")
+        );
+    }
+
     public UserDto toDto() {
         return new UserDto(
                 nickname.getValue(),

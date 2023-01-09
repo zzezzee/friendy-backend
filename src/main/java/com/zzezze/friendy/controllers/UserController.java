@@ -3,8 +3,10 @@ package com.zzezze.friendy.controllers;
 import com.zzezze.friendy.applications.GetUserProfileService;
 import com.zzezze.friendy.applications.GetUserService;
 import com.zzezze.friendy.applications.PatchUserProfileService;
+import com.zzezze.friendy.dtos.CurrentNicknameDto;
 import com.zzezze.friendy.dtos.UserProfilePatchRequestDto;
 import com.zzezze.friendy.dtos.UserDto;
+import com.zzezze.friendy.dtos.UserRelationShipDto;
 import com.zzezze.friendy.models.value_objects.Introduction;
 import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.value_objects.ProfileImage;
@@ -13,6 +15,7 @@ import com.zzezze.friendy.utils.S3Uploader;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,13 +42,15 @@ public class UserController {
         this.s3Uploader = s3Uploader;
     }
 
-    @GetMapping("/me")
-    public UserDto user(
-            @RequestAttribute("username") Username username
-    ) {
-        UserDto userDto = getUserService.detail(username);
+    @GetMapping("/me/{currentNickname}")
+    public UserRelationShipDto user(
+            @RequestAttribute("username") Username username,
+            @PathVariable Nickname currentNickname
 
-        return userDto;
+    ) {
+        UserRelationShipDto userRelationShipDto = getUserService.detail(username, currentNickname);
+
+        return userRelationShipDto;
     }
 
     @GetMapping("profile")

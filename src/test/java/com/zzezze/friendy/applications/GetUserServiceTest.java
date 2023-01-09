@@ -1,7 +1,10 @@
 package com.zzezze.friendy.applications;
 
 import com.zzezze.friendy.dtos.UserDto;
+import com.zzezze.friendy.dtos.UserRelationShipDto;
+import com.zzezze.friendy.models.RelationShip;
 import com.zzezze.friendy.models.User;
+import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.value_objects.Username;
 import com.zzezze.friendy.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,22 +17,26 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 class GetUserServiceTest {
-    private GetUserService getUserService;
-    private UserRepository userRepository;
+    GetUserService getUserService;
+    UserRepository userRepository;
+    RelationShip relationShip;
 
     @BeforeEach
     void setup() {
         userRepository = mock(UserRepository.class);
-        getUserService = new GetUserService(userRepository);
+        relationShip = new RelationShip();
+        getUserService = new GetUserService(userRepository, relationShip);
     }
 
     @Test
     void detail() {
-        Username username = new Username("zzezze");
+        Username username = new Username("test");
+        Nickname nickname = new Nickname("zzezze");
+
         given(userRepository.findByUsername(username))
                 .willReturn(Optional.of(User.fake()));
 
-        UserDto userDto = getUserService.detail(username);
+        UserRelationShipDto userDto = getUserService.detail(username, nickname);
 
         assertThat(userDto.getNickname()).isEqualTo("zzezze");
     }

@@ -3,6 +3,7 @@ package com.zzezze.friendy.controllers;
 import com.zzezze.friendy.applications.GetUserProfileService;
 import com.zzezze.friendy.applications.GetUserService;
 import com.zzezze.friendy.applications.PatchUserProfileService;
+import com.zzezze.friendy.dtos.UserRelationShipDto;
 import com.zzezze.friendy.models.User;
 import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.value_objects.Username;
@@ -46,15 +47,19 @@ class UserControllerTest {
     @Test
     void user() throws Exception {
         Username username = new Username("test");
+        Nickname nickname = new Nickname("zzezze");
 
-        given(getUserService.detail(username))
-                .willReturn(User.fake().toDto());
+        given(getUserService.detail(username, nickname))
+                .willReturn(UserRelationShipDto.fake());
 
         String token = jwtUtil.encode(username.getValue());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/users/me")
                         .header("Authorization", "Bearer " + token)
-                )
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{" +
+                                "\"currentNickname\":\"zzezze\"" +
+                                "}"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("\"nickname\":\"zzezze\"")
