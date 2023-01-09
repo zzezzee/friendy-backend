@@ -2,11 +2,12 @@ package com.zzezze.friendy.controllers;
 
 import com.zzezze.friendy.applications.GetUserProfileService;
 import com.zzezze.friendy.applications.GetUserService;
+import com.zzezze.friendy.applications.GetUsersService;
 import com.zzezze.friendy.applications.PatchUserProfileService;
-import com.zzezze.friendy.dtos.CurrentNicknameDto;
 import com.zzezze.friendy.dtos.UserProfilePatchRequestDto;
 import com.zzezze.friendy.dtos.UserDto;
 import com.zzezze.friendy.dtos.UserRelationShipDto;
+import com.zzezze.friendy.dtos.UsersDto;
 import com.zzezze.friendy.models.value_objects.Introduction;
 import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.value_objects.ProfileImage;
@@ -15,7 +16,6 @@ import com.zzezze.friendy.utils.S3Uploader;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,20 +33,21 @@ public class UserController {
     private final GetUserService getUserService;
     private final GetUserProfileService getUserProfileService;
     private final PatchUserProfileService patchUserProfileService;
+    private final GetUsersService getUsersService;
     private final S3Uploader s3Uploader;
 
-    public UserController(GetUserService getUserService, GetUserProfileService getUserProfileService, PatchUserProfileService patchUserProfileService, S3Uploader s3Uploader) {
+    public UserController(GetUserService getUserService, GetUserProfileService getUserProfileService, PatchUserProfileService patchUserProfileService, GetUsersService getUsersService, S3Uploader s3Uploader) {
         this.getUserService = getUserService;
         this.getUserProfileService = getUserProfileService;
         this.patchUserProfileService = patchUserProfileService;
+        this.getUsersService = getUsersService;
         this.s3Uploader = s3Uploader;
     }
 
-    @GetMapping("/me/{currentNickname}")
+    @GetMapping("/me")
     public UserRelationShipDto user(
             @RequestAttribute("username") Username username,
-            @PathVariable Nickname currentNickname
-
+            @RequestParam Nickname currentNickname
     ) {
         UserRelationShipDto userRelationShipDto = getUserService.detail(username, currentNickname);
 
@@ -60,6 +61,13 @@ public class UserController {
         UserDto UserDto = getUserProfileService.profile(nickname);
 
         return UserDto;
+    }
+
+    @GetMapping
+    public UsersDto list() {
+        UsersDto usersDto = getUsersService.list();
+
+        return usersDto;
     }
 
     @PatchMapping

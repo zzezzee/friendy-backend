@@ -2,8 +2,10 @@ package com.zzezze.friendy.controllers;
 
 import com.zzezze.friendy.applications.GetUserProfileService;
 import com.zzezze.friendy.applications.GetUserService;
+import com.zzezze.friendy.applications.GetUsersService;
 import com.zzezze.friendy.applications.PatchUserProfileService;
 import com.zzezze.friendy.dtos.UserRelationShipDto;
+import com.zzezze.friendy.dtos.UsersDto;
 import com.zzezze.friendy.models.User;
 import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.value_objects.Username;
@@ -17,6 +19,8 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
@@ -39,6 +43,9 @@ class UserControllerTest {
     private PatchUserProfileService patchUserProfileService;
 
     @MockBean
+    private GetUsersService getUsersService;
+
+    @MockBean
     private S3Uploader s3Uploader;
 
     @SpyBean
@@ -54,12 +61,8 @@ class UserControllerTest {
 
         String token = jwtUtil.encode(username.getValue());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/users/me")
-                        .header("Authorization", "Bearer " + token)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{" +
-                                "\"currentNickname\":\"zzezze\"" +
-                                "}"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/me?currentNickname=zzezze")
+                        .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("\"nickname\":\"zzezze\"")
@@ -99,6 +102,18 @@ class UserControllerTest {
                 .andExpect(status().isNoContent())
                 .andExpect(content().string(
                         containsString("\"profileImage\"")
+                ));
+    }
+
+    @Test
+    void list() throws Exception {
+        given(getUsersService.list())
+                .willReturn(new UsersDto(List.of(User.fake().toDto())));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/users"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("\"users\"")
                 ));
     }
 }
