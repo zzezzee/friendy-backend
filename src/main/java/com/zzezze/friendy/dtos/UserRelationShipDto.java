@@ -2,22 +2,22 @@ package com.zzezze.friendy.dtos;
 
 public class UserRelationShipDto {
     private String nickname;
-    private String relationShip;
+    private String relationship;
 
     public UserRelationShipDto() {
     }
 
-    public UserRelationShipDto(String nickname, String relationShip) {
+    public UserRelationShipDto(String nickname, String relationship) {
         this.nickname = nickname;
-        this.relationShip = relationShip;
+        this.relationship = relationship;
     }
 
     public String getNickname() {
         return nickname;
     }
 
-    public String getRelationShip() {
-        return relationShip;
+    public String getRelationship() {
+        return relationship;
     }
 
     public static UserRelationShipDto fake() {

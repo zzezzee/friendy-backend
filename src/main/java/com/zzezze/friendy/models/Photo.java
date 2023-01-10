@@ -4,6 +4,7 @@ import com.zzezze.friendy.dtos.PhotoDto;
 import com.zzezze.friendy.models.value_objects.Explanation;
 import com.zzezze.friendy.models.value_objects.Image;
 import com.zzezze.friendy.models.value_objects.Username;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
