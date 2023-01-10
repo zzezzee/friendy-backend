@@ -99,6 +99,7 @@ public class User {
 
     public UserDto toDto() {
         return new UserDto(
+                id,
                 nickname.getValue(),
                 profileImage.getValue(),
                 introduction.getValue()

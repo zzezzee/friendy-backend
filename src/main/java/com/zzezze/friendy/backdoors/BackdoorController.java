@@ -20,9 +20,24 @@ public class BackdoorController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    //    https://images.unsplash.com/random
     @GetMapping("/setup-users")
     public String setupUsers() {
         jdbcTemplate.execute("DELETE FROM users");
+
+        for (int i = 1001; i < 1020; i++) {
+            jdbcTemplate.update("" +
+                            "INSERT INTO users(" +
+                            " id, username, password, nickname, profile_image, introduction" +
+                            ")" +
+                            " VALUES(" + i + "1, ?, ?, ?, ?, ?)",
+                    "test"+i,
+                    passwordEncoder.encode("test"+i),
+                    "testUser"+i,
+                    "https://picsum.photos/id/"+(i-900)+"/200/300",
+                    i+""
+            );
+        }
 
         jdbcTemplate.update("" +
                         "INSERT INTO users(" +
@@ -48,6 +63,30 @@ public class BackdoorController {
                 "여긴 석태님 미니홈피"
         );
 
+        jdbcTemplate.update("" +
+                        "INSERT INTO users(" +
+                        " id, username, password, nickname, profile_image, introduction" +
+                        ")" +
+                        " VALUES(3, ?, ?, ?, ?, ?)",
+                "test3",
+                passwordEncoder.encode("test3"),
+                "jenna",
+                "https://friendyimages.s3.ap-northeast-2.amazonaws.com/%E1%84%8B%E1%85%B3%E1%86%AB%E1%84%92%E1%85%B4%E1%84%91%E1%85%B3%E1%84%85%E1%85%A9%E1%84%91%E1%85%B5%E1%86%AF%E1%84%89%E1%85%A1%E1%84%8C%E1%85%B5%E1%86%AB.avif",
+                "여긴 은희님 미니홈피"
+        );
+
+        jdbcTemplate.update("" +
+                        "INSERT INTO users(" +
+                        " id, username, password, nickname, profile_image, introduction" +
+                        ")" +
+                        " VALUES(4, ?, ?, ?, ?, ?)",
+                "test4",
+                passwordEncoder.encode("test4"),
+                "jiwoo",
+                "https://picsum.photos/id/50/200/300",
+                "여긴 지우님 미니홈피"
+        );
+
         return "OK";
     }
 
@@ -57,64 +96,6 @@ public class BackdoorController {
         jdbcTemplate.execute("DELETE FROM photo");
         jdbcTemplate.execute("DELETE FROM guest_book");
 
-
-        //미니홈피 세팅
-//        jdbcTemplate.update("" +
-//                        "INSERT INTO mini_homepage(" +
-//                        " id, username, nickname, profile_image, introduction" +
-//                        ")" +
-//                        " VALUES(1, ?, ?, ?, ?)",
-//                "test",
-//                "zzezze",
-//                "https://friendyimages.s3.ap-northeast-2.amazonaws.com/premium_photo-1669040674572-836c64a3ac70.avif",
-//                "미니홈피 소개입니다!"
-//        );
-//
-//        jdbcTemplate.update("" +
-//                        "INSERT INTO mini_homepage(" +
-//                        " id, username, nickname, profile_image, introduction" +
-//                        ")" +
-//                        " VALUES(2, ?, ?, ?, ?)",
-//                "test2",
-//                "suktae",
-//                "https://friendyimages.s3.ap-northeast-2.amazonaws.com/photo-1671299739805-632b8cbf4977.avif",
-//                "여긴 석태님 미니홈피"
-//        );
-//
-//        jdbcTemplate.update("" +
-//                        "INSERT INTO mini_homepage(" +
-//                        " id, username, nickname, profile_image, introduction" +
-//                        ")" +
-//                        " VALUES(3, ?, ?, ?, ?)",
-//                "test3",
-//                "sunghwan",
-//                "https://friendyimages.s3.ap-northeast-2.amazonaws.com/%E1%84%92%E1%85%A5%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B5.avif",
-//                "여긴 성환님 미니홈피"
-//        );
-//
-//        jdbcTemplate.update("" +
-//                        "INSERT INTO mini_homepage(" +
-//                        " id, username, nickname, profile_image, introduction" +
-//                        ")" +
-//                        " VALUES(4, ?, ?, ?, ?)",
-//                "test4",
-//                "junhyeong",
-//                "https://friendyimages.s3.ap-northeast-2.amazonaws.com/%E1%84%8C%E1%85%AE%E1%86%AB%E1%84%92%E1%85%A7%E1%86%BC%E1%84%91%E1%85%B3%E1%84%85%E1%85%A9%E1%84%91%E1%85%B5%E1%86%AF%E1%84%89%E1%85%A1%E1%84%8C%E1%85%B5%E1%86%AB.avif",
-//                "여긴 준형님 미니홈피"
-//        );
-//
-//        jdbcTemplate.update("" +
-//                        "INSERT INTO mini_homepage(" +
-//                        " id, username, nickname, profile_image, introduction" +
-//                        ")" +
-//                        " VALUES(5, ?, ?, ?, ?)",
-//                "test5",
-//                "jenna",
-//                "https://friendyimages.s3.ap-northeast-2.amazonaws.com/%E1%84%8B%E1%85%B3%E1%86%AB%E1%84%92%E1%85%B4%E1%84%91%E1%85%B3%E1%84%85%E1%85%A9%E1%84%91%E1%85%B5%E1%86%AF%E1%84%89%E1%85%A1%E1%84%8C%E1%85%B5%E1%86%AB.avif",
-//                "여긴 은희님 미니홈피"
-//        );
-
-
         // 사진첩 세팅
         // zzezze
         jdbcTemplate.update("" +
@@ -123,6 +104,25 @@ public class BackdoorController {
                 ")" +
                 " VALUES(1, 'test', 'https://friendyimages.s3.ap-northeast-2.amazonaws.com/photo1.avif', '이건 사진 설명1'),\n"
                 + " (2, 'test', 'https://friendyimages.s3.ap-northeast-2.amazonaws.com/photo2.avif', '이건 사진 설명2')\n"
+        );
+
+        return "OK";
+    }
+
+    @GetMapping("/setup-relationship")
+    public String setupRelationship() {
+        jdbcTemplate.execute("DELETE FROM relationship");
+        jdbcTemplate.execute("DELETE FROM photo");
+        jdbcTemplate.execute("DELETE FROM guest_book");
+
+        // 친구세팅
+        // zzezze
+        jdbcTemplate.update("" +
+                "INSERT INTO relationship(" +
+                " id, sender, receiver" +
+                ")" +
+                " VALUES(1, 'test', 'test2'),\n"
+                + " (2, 'test3', 'test')\n"
         );
 
         return "OK";
