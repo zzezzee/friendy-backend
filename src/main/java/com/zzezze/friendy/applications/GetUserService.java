@@ -34,8 +34,6 @@ public class GetUserService {
 
         String relation = discriminate(visitor, owner);
 
-        System.out.println("relation" + relation);
-
         return new UserRelationShipDto(
                 visitor.getNickname().getValue(),
                 relation
