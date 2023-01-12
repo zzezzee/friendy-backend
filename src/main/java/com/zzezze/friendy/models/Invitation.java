@@ -1,6 +1,5 @@
 package com.zzezze.friendy.models;
 
-import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.value_objects.Username;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
@@ -8,10 +7,10 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import org.springframework.stereotype.Component;
+import jakarta.persistence.criteria.CriteriaBuilder;
 
 @Entity
-public class Relationship {
+public class Invitation {
     @Id
     @GeneratedValue
     private Long id;
@@ -24,18 +23,13 @@ public class Relationship {
     @AttributeOverride(name = "value", column = @Column(name = "receiver"))
     private Username receiver;
 
-    public Relationship() {
+    public Invitation() {
     }
 
-    public Relationship(Long id, Username user, Username otherUser) {
+    public Invitation(Long id, Username sender, Username receiver) {
         this.id = id;
-        this.sender = user;
-        this.receiver = otherUser;
-    }
-
-    public Relationship(Username user, Username otherUser) {
-        this.sender = user;
-        this.receiver = otherUser;
+        this.sender = sender;
+        this.receiver = receiver;
     }
 
     public Long getId() {
@@ -50,11 +44,11 @@ public class Relationship {
         return receiver;
     }
 
-    public static Relationship fake() {
-        return new Relationship(
+    public static Invitation fake() {
+        return new Invitation(
                 1L,
-                new Username("zzezze"),
-                new Username("sunghwan")
-                );
+                new Username("test1"),
+                new Username("test2")
+        );
     }
 }

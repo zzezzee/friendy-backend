@@ -37,6 +37,9 @@ class GetUserServiceTest {
         given(userRepository.findByUsername(username))
                 .willReturn(Optional.of(User.fake()));
 
+        given(userRepository.findByNickname(nickname))
+                .willReturn(Optional.of(User.fake()));
+
         UserRelationShipDto userDto = getUserService.detail(username, nickname);
 
         assertThat(userDto.getNickname()).isEqualTo("zzezze");
