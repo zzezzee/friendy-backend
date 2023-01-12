@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+
 @RestController
 @RequestMapping("/backdoor")
 @Transactional
@@ -31,11 +33,11 @@ public class BackdoorController {
                             " id, username, password, nickname, profile_image, introduction" +
                             ")" +
                             " VALUES(" + i + "1, ?, ?, ?, ?, ?)",
-                    "test"+i,
-                    passwordEncoder.encode("test"+i),
-                    "testUser"+i,
-                    "https://picsum.photos/id/"+(i-900)+"/200/300",
-                    i+""
+                    "test" + i,
+                    passwordEncoder.encode("test" + i),
+                    "testUser" + i,
+                    "https://picsum.photos/id/" + (i - 900) + "/200/300",
+                    i + ""
             );
         }
 
@@ -112,9 +114,6 @@ public class BackdoorController {
     @GetMapping("/setup-relationship")
     public String setupRelationship() {
         jdbcTemplate.execute("DELETE FROM relationship");
-        jdbcTemplate.execute("DELETE FROM photo");
-        jdbcTemplate.execute("DELETE FROM guest_book");
-
         // 친구세팅
         // zzezze
         jdbcTemplate.update("" +
@@ -123,6 +122,24 @@ public class BackdoorController {
                 ")" +
                 " VALUES(1, 'test', 'test2'),\n"
                 + " (2, 'test3', 'test')\n"
+        );
+
+        return "OK";
+    }
+
+    @GetMapping("/setup-invitation")
+    public String invitations() {
+        jdbcTemplate.execute("DELETE FROM invitation");
+
+        LocalDateTime now = LocalDateTime.now();
+        // 친구세팅
+        // zzezze
+        jdbcTemplate.update("" +
+                "INSERT INTO invitation(" +
+                " id, sender, receiver, created_at" +
+                ")" +
+                " VALUES(1, 'test', 'test4', '2023-01-12T16:29:50.854851'),\n"
+                + " (2, 'test1001', 'test', '2023-01-12T16:29:50.854851')\n"
         );
 
         return "OK";

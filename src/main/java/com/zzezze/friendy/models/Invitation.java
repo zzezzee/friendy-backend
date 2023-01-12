@@ -8,6 +8,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 public class Invitation {
@@ -22,6 +26,9 @@ public class Invitation {
     @Embedded
     @AttributeOverride(name = "value", column = @Column(name = "receiver"))
     private Username receiver;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
     public Invitation() {
     }
