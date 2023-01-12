@@ -14,30 +14,14 @@ import org.springframework.stereotype.Service;
 @Service
 @Transactional
 public class RefuseInvitationService {
-    private final InvitationRepository invitationRepository;
-    private final UserRepository userRepository;
+    private final DeleteReceivedInvitationService deleteReceivedInvitationService;
 
-    public RefuseInvitationService(InvitationRepository invitationRepository, UserRepository userRepository) {
-        this.invitationRepository = invitationRepository;
-        this.userRepository = userRepository;
+    public RefuseInvitationService(DeleteReceivedInvitationService deleteReceivedInvitationService) {
+        this.deleteReceivedInvitationService = deleteReceivedInvitationService;
     }
 
     public String refuse(Username username, Long id) {
-        User receiver = userRepository.findByUsername(username)
-                .orElseThrow(UserNotFound::new);
-
-        User sender = userRepository.findById(id)
-                .orElseThrow(UserNotFound::new);
-
-        Invitation invitation = invitationRepository
-                .findBySenderAndReceiver(sender.getUsername(), receiver.getUsername())
-                .orElseThrow(InvitationNotFound::new);
-
-        if(!receiver.getUsername().equals(invitation.getReceiver())){
-            throw new CancelInvitationFailed();
-        }
-
-        invitationRepository.deleteBySender(sender.getUsername());
+        deleteReceivedInvitationService.delete(username, id);
 
         return "Refuse invitation success";
     }

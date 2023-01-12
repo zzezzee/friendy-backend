@@ -37,7 +37,7 @@ public class CancelInvitationService {
             throw new CancelInvitationFailed();
         }
 
-        invitationRepository.deleteByReceiver(receiver.getUsername());
+        invitationRepository.deleteById(invitation.getId());
 
         return "Cancel invitation success";
     }

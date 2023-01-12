@@ -10,6 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import org.springframework.stereotype.Component;
 
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 @Entity
 public class Relationship {
     @Id
@@ -27,15 +29,15 @@ public class Relationship {
     public Relationship() {
     }
 
-    public Relationship(Long id, Username user, Username otherUser) {
+    public Relationship(Long id, Username sender, Username receiver) {
         this.id = id;
-        this.sender = user;
-        this.receiver = otherUser;
+        this.sender = sender;
+        this.receiver = receiver;
     }
 
-    public Relationship(Username user, Username otherUser) {
-        this.sender = user;
-        this.receiver = otherUser;
+    public Relationship(Username sender, Username receiver) {
+        this.sender = sender;
+        this.receiver = receiver;
     }
 
     public Long getId() {

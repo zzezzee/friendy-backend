@@ -58,4 +58,8 @@ public class Invitation {
                 new Username("test2")
         );
     }
+
+    public Relationship accept() {
+        return new Relationship(sender, receiver);
+    }
 }
