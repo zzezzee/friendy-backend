@@ -1,5 +1,6 @@
 package com.zzezze.friendy.controllers;
 
+import com.zzezze.friendy.applications.AcceptInvitationService;
 import com.zzezze.friendy.applications.CancelInvitationService;
 import com.zzezze.friendy.applications.GetInvitationsService;
 import com.zzezze.friendy.applications.RefuseInvitationService;
@@ -19,11 +20,13 @@ public class InvitationController {
     private final GetInvitationsService getInvitationsService;
     private final CancelInvitationService cancelInvitationService;
     private final RefuseInvitationService refuseInvitationService;
+    private final AcceptInvitationService acceptInvitationService;
 
-    public InvitationController(GetInvitationsService getInvitationsService, CancelInvitationService cancelInvitationService, RefuseInvitationService refuseInvitationService) {
+    public InvitationController(GetInvitationsService getInvitationsService, CancelInvitationService cancelInvitationService, RefuseInvitationService refuseInvitationService, AcceptInvitationService acceptInvitationService) {
         this.getInvitationsService = getInvitationsService;
         this.cancelInvitationService = cancelInvitationService;
         this.refuseInvitationService = refuseInvitationService;
+        this.acceptInvitationService = acceptInvitationService;
     }
 
     @GetMapping
@@ -46,6 +49,9 @@ public class InvitationController {
         }
         if (type.equals("refuse")) {
             return refuseInvitationService.refuse(username, id);
+        }
+        if (type.equals("accept")) {
+            return acceptInvitationService.accept(username, id);
         }
 
         return "type undefined";

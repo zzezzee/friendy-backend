@@ -1,5 +1,6 @@
 package com.zzezze.friendy.controllers;
 
+import com.zzezze.friendy.applications.AcceptInvitationService;
 import com.zzezze.friendy.applications.CancelInvitationService;
 import com.zzezze.friendy.applications.GetInvitationsService;
 import com.zzezze.friendy.applications.RefuseInvitationService;
@@ -31,10 +32,13 @@ class InvitationControllerTest {
     private GetInvitationsService getInvitesService;
 
     @MockBean
-    private CancelInvitationService deleteInvitationsService;
+    private CancelInvitationService deleteInvitationService;
 
     @MockBean
-    private RefuseInvitationService refuseInvitationsService;
+    private RefuseInvitationService refuseInvitationService;
+
+    @MockBean
+    private AcceptInvitationService acceptInvitationService;
 
     @SpyBean
     private JwtUtil jwtUtil;
@@ -64,7 +68,7 @@ class InvitationControllerTest {
     void cancel() throws Exception {
         Username username = new Username("test");
 
-        given(deleteInvitationsService.cancel(username, 1L))
+        given(deleteInvitationService.cancel(username, 1L))
                 .willReturn("Cancel invitation success");
 
         String token = jwtUtil.encode(username.getValue());
@@ -81,7 +85,7 @@ class InvitationControllerTest {
     void refuse() throws Exception {
         Username username = new Username("test");
 
-        given(refuseInvitationsService.refuse(username, 1L))
+        given(refuseInvitationService.refuse(username, 1L))
                 .willReturn("Refuse invitation success");
 
         String token = jwtUtil.encode(username.getValue());
@@ -91,6 +95,23 @@ class InvitationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("Refuse invitation success")
+                ));
+    }
+
+    @Test
+    void accept() throws Exception {
+        Username username = new Username("test");
+
+        given(acceptInvitationService.accept(username, 1L))
+                .willReturn("Accept invitation success");
+
+        String token = jwtUtil.encode(username.getValue());
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/invitations/1?type=accept")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("Accept invitation success")
                 ));
     }
 }
