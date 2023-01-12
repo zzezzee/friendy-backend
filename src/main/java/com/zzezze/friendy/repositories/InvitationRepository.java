@@ -17,4 +17,6 @@ public interface InvitationRepository extends JpaRepository<Invitation, Long> {
     Optional<Invitation> findBySenderAndReceiver(Username username, Username username1);
 
     void deleteByReceiver(Username username);
+
+    void deleteBySender(Username username);
 }

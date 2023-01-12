@@ -2,6 +2,7 @@ package com.zzezze.friendy.controllers;
 
 import com.zzezze.friendy.applications.CancelInvitationService;
 import com.zzezze.friendy.applications.GetInvitationsService;
+import com.zzezze.friendy.applications.RefuseInvitationService;
 import com.zzezze.friendy.dtos.InvitationsDto;
 import com.zzezze.friendy.models.value_objects.Username;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,10 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class InvitationController {
     private final GetInvitationsService getInvitationsService;
     private final CancelInvitationService cancelInvitationService;
+    private final RefuseInvitationService refuseInvitationService;
 
-    public InvitationController(GetInvitationsService getInvitationsService, CancelInvitationService cancelInvitationService) {
+    public InvitationController(GetInvitationsService getInvitationsService, CancelInvitationService cancelInvitationService, RefuseInvitationService refuseInvitationService) {
         this.getInvitationsService = getInvitationsService;
         this.cancelInvitationService = cancelInvitationService;
+        this.refuseInvitationService = refuseInvitationService;
     }
 
     @GetMapping
@@ -41,7 +44,10 @@ public class InvitationController {
         if (type.equals("cancel")) {
             return cancelInvitationService.cancel(username, id);
         }
+        if (type.equals("refuse")) {
+            return refuseInvitationService.refuse(username, id);
+        }
 
-        return "delete failed";
+        return "type undefined";
     }
 }
