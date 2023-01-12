@@ -2,6 +2,7 @@ package com.zzezze.friendy.controllers;
 
 import com.zzezze.friendy.applications.CancelInvitationService;
 import com.zzezze.friendy.applications.GetInvitationsService;
+import com.zzezze.friendy.applications.RefuseInvitationService;
 import com.zzezze.friendy.dtos.InvitationsDto;
 import com.zzezze.friendy.models.User;
 import com.zzezze.friendy.models.value_objects.Username;
@@ -31,6 +32,9 @@ class InvitationControllerTest {
 
     @MockBean
     private CancelInvitationService deleteInvitationsService;
+
+    @MockBean
+    private RefuseInvitationService refuseInvitationsService;
 
     @SpyBean
     private JwtUtil jwtUtil;
@@ -70,6 +74,23 @@ class InvitationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("Cancel invitation success")
+                ));
+    }
+
+    @Test
+    void refuse() throws Exception {
+        Username username = new Username("test");
+
+        given(refuseInvitationsService.refuse(username, 1L))
+                .willReturn("Refuse invitation success");
+
+        String token = jwtUtil.encode(username.getValue());
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/invitations/1?type=refuse")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("Refuse invitation success")
                 ));
     }
 }
