@@ -1,23 +1,26 @@
 package com.zzezze.friendy.applications;
 
+import com.zzezze.friendy.models.Invitation;
 import com.zzezze.friendy.models.value_objects.Username;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 class AcceptInvitationServiceTest {
     DeleteReceivedInvitationService deleteReceivedInvitationService;
     AcceptInvitationService acceptInvitationService;
-    CreateRelationshipService createRelationshipService;
+    ApplicationEventPublisher applicationEventPublisher;
 
     @BeforeEach
     void setup() {
         deleteReceivedInvitationService = mock(DeleteReceivedInvitationService.class);
-        createRelationshipService = mock(CreateRelationshipService.class);
-        acceptInvitationService = new AcceptInvitationService(deleteReceivedInvitationService, createRelationshipService);
+        applicationEventPublisher = mock(ApplicationEventPublisher.class);
+        acceptInvitationService = new AcceptInvitationService(deleteReceivedInvitationService, applicationEventPublisher);
     }
 
     @Test
@@ -28,6 +31,6 @@ class AcceptInvitationServiceTest {
 
         verify(deleteReceivedInvitationService).delete(username1, 1L);
 
-        assertThat(message).isEqualTo("Refuse invitation success");
+        assertThat(message).isEqualTo("Accept invitation success");
     }
 }
