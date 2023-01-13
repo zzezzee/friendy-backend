@@ -2,10 +2,12 @@ package com.zzezze.friendy.controllers;
 
 import com.zzezze.friendy.applications.AcceptInvitationService;
 import com.zzezze.friendy.applications.CancelInvitationService;
+import com.zzezze.friendy.applications.CreateInvitationService;
 import com.zzezze.friendy.applications.GetInvitationsService;
 import com.zzezze.friendy.applications.RefuseInvitationService;
 import com.zzezze.friendy.dtos.InvitationsDto;
 import com.zzezze.friendy.models.User;
+import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.value_objects.Username;
 import com.zzezze.friendy.utils.JwtUtil;
 import org.junit.jupiter.api.Test;
@@ -29,7 +31,7 @@ class InvitationControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private GetInvitationsService getInvitesService;
+    private GetInvitationsService getInvitationsService;
 
     @MockBean
     private CancelInvitationService deleteInvitationService;
@@ -40,6 +42,9 @@ class InvitationControllerTest {
     @MockBean
     private AcceptInvitationService acceptInvitationService;
 
+    @MockBean
+    private CreateInvitationService createInvitationService;
+
     @SpyBean
     private JwtUtil jwtUtil;
 
@@ -48,7 +53,7 @@ class InvitationControllerTest {
     void list() throws Exception {
         Username username = new Username("test");
 
-        given(getInvitesService.list(username))
+        given(getInvitationsService.list(username))
                 .willReturn(new InvitationsDto(
                         List.of(User.fake().toDto()),
                         List.of(User.fake().toDto())
@@ -61,6 +66,24 @@ class InvitationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("invitationsReceived")
+                ));
+    }
+
+    @Test
+    void create() throws Exception {
+        Username username = new Username("test");
+        Nickname nickname = new Nickname("zzezze");
+
+        given(createInvitationService.create(username, nickname))
+                .willReturn(User.fake().toDto());
+
+        String token = jwtUtil.encode(username.getValue());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/invitations?nickname=zzezze")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("id")
                 ));
     }
 

@@ -7,9 +7,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -39,6 +37,11 @@ public class Invitation {
         this.receiver = receiver;
     }
 
+    public Invitation(Username sender, Username receiver) {
+        this.sender = sender;
+        this.receiver = receiver;
+    }
+
     public Long getId() {
         return id;
     }
@@ -51,15 +54,19 @@ public class Invitation {
         return receiver;
     }
 
+    public Relationship accept() {
+        return new Relationship(sender, receiver);
+    }
+
+    public static Invitation of(Username sender, Username receiver) {
+        return new Invitation(sender, receiver);
+    }
+
     public static Invitation fake() {
         return new Invitation(
                 1L,
                 new Username("test1"),
                 new Username("test2")
         );
-    }
-
-    public Relationship accept() {
-        return new Relationship(sender, receiver);
     }
 }
