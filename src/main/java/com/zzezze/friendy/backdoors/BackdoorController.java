@@ -1,6 +1,8 @@
 package com.zzezze.friendy.backdoors;
 
 
+import com.zzezze.friendy.models.Comment;
+import com.zzezze.friendy.repositories.CommentRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,10 +18,12 @@ import java.time.LocalDateTime;
 public class BackdoorController {
     private final JdbcTemplate jdbcTemplate;
     private final PasswordEncoder passwordEncoder;
+    private final CommentRepository commentRepository;
 
-    public BackdoorController(JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder) {
+    public BackdoorController(JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder, CommentRepository commentRepository) {
         this.jdbcTemplate = jdbcTemplate;
         this.passwordEncoder = passwordEncoder;
+        this.commentRepository = commentRepository;
     }
 
     //    https://images.unsplash.com/random
@@ -94,9 +98,10 @@ public class BackdoorController {
 
     @GetMapping("/setup-miniHomepages")
     public String setupMiniHomepages() {
-        jdbcTemplate.execute("DELETE FROM mini_homepage");
         jdbcTemplate.execute("DELETE FROM photo");
         jdbcTemplate.execute("DELETE FROM guest_book");
+
+        LocalDateTime now = LocalDateTime.now();
 
         // 사진첩 세팅
         // zzezze
@@ -107,6 +112,8 @@ public class BackdoorController {
                 " VALUES(1, 'test', 'https://friendyimages.s3.ap-northeast-2.amazonaws.com/photo1.avif', '이건 사진 설명1'),\n"
                 + " (2, 'test', 'https://friendyimages.s3.ap-northeast-2.amazonaws.com/photo2.avif', '이건 사진 설명2')\n"
         );
+
+        commentRepository.save(Comment.fake());
 
         return "OK";
     }
