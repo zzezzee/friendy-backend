@@ -2,9 +2,11 @@ package com.zzezze.friendy.controllers;
 
 import com.zzezze.friendy.applications.CreatePhotoService;
 import com.zzezze.friendy.applications.DeletePhotoService;
+import com.zzezze.friendy.applications.GetPhotoDetailService;
 import com.zzezze.friendy.applications.GetPhotosService;
 import com.zzezze.friendy.applications.PatchPhotoService;
 import com.zzezze.friendy.dtos.PhotoDeleteResponseDto;
+import com.zzezze.friendy.dtos.PhotoDetailDto;
 import com.zzezze.friendy.dtos.PhotoDto;
 import com.zzezze.friendy.dtos.PhotoPatchRequestDto;
 import com.zzezze.friendy.dtos.PhotoRegistrationDto;
@@ -34,18 +36,20 @@ import java.io.IOException;
 @RequestMapping("photos")
 public class PhotoController {
     private final GetPhotosService getPhotosService;
+    private final GetPhotoDetailService getPhotoDetailService;
     private final CreatePhotoService createPhotoService;
     private final DeletePhotoService deletePhotoService;
     private final PatchPhotoService patchPhotoService;
 
     private final S3Uploader s3Uploader;
 
-    public PhotoController(GetPhotosService getPhotosService, S3Uploader s3Uploader, CreatePhotoService createPhotoService, DeletePhotoService deletePhotoService, PatchPhotoService patchPhotoService) {
+    public PhotoController(GetPhotosService getPhotosService, GetPhotoDetailService getPhotoDetailService, CreatePhotoService createPhotoService, DeletePhotoService deletePhotoService, PatchPhotoService patchPhotoService, S3Uploader s3Uploader) {
         this.getPhotosService = getPhotosService;
-        this.s3Uploader = s3Uploader;
+        this.getPhotoDetailService = getPhotoDetailService;
         this.createPhotoService = createPhotoService;
         this.deletePhotoService = deletePhotoService;
         this.patchPhotoService = patchPhotoService;
+        this.s3Uploader = s3Uploader;
     }
 
     @GetMapping
@@ -55,6 +59,15 @@ public class PhotoController {
         PhotosDto photosDto = getPhotosService.list(nickname);
 
         return photosDto;
+    }
+
+    @GetMapping("{id}")
+    public PhotoDetailDto photo(
+            @PathVariable Long id
+    ) {
+        PhotoDetailDto photoDetailDto = getPhotoDetailService.detail(id);
+
+        return photoDetailDto;
     }
 
     @PostMapping

@@ -16,7 +16,7 @@ public class InvitationAcceptEventHandler {
         this.createRelationshipService = createRelationshipService;
     }
 
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @EventListener
     public void createRelationship(InvitationAcceptedEvent event){
         createRelationshipService.create(event.getInvitation());
     }

@@ -2,9 +2,11 @@ package com.zzezze.friendy.controllers;
 
 import com.zzezze.friendy.applications.CreatePhotoService;
 import com.zzezze.friendy.applications.DeletePhotoService;
+import com.zzezze.friendy.applications.GetPhotoDetailService;
 import com.zzezze.friendy.applications.GetPhotosService;
 import com.zzezze.friendy.applications.PatchPhotoService;
 import com.zzezze.friendy.dtos.PhotoDeleteResponseDto;
+import com.zzezze.friendy.dtos.PhotoDetailDto;
 import com.zzezze.friendy.dtos.PhotosDto;
 import com.zzezze.friendy.models.value_objects.Explanation;
 import com.zzezze.friendy.models.value_objects.Image;
@@ -39,6 +41,9 @@ class PhotoControllerTest {
     private GetPhotosService getPhotosService;
 
     @MockBean
+    private GetPhotoDetailService getPhotoDetailService;
+
+    @MockBean
     private CreatePhotoService createPhotoService;
 
     @MockBean
@@ -54,7 +59,7 @@ class PhotoControllerTest {
     private S3Uploader s3Uploader;
 
     @Test
-    void miniHomepage() throws Exception {
+    void list() throws Exception {
         Nickname nickname = new Nickname("zzezze");
         given(getPhotosService.list(nickname))
                 .willReturn(new PhotosDto(List.of(Photo.fake().toDto())));
@@ -63,6 +68,18 @@ class PhotoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("\"photos\"")
+                ));
+    }
+
+    @Test
+    void detail() throws Exception {
+        given(getPhotoDetailService.detail(1L))
+                .willReturn(new PhotoDetailDto(Photo.fake().toDto()));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/photos/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("\"photo\"")
                 ));
     }
 
