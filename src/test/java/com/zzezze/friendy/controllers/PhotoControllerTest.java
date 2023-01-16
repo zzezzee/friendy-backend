@@ -5,6 +5,7 @@ import com.zzezze.friendy.applications.DeletePhotoService;
 import com.zzezze.friendy.applications.GetPhotoDetailService;
 import com.zzezze.friendy.applications.GetPhotosService;
 import com.zzezze.friendy.applications.PatchPhotoService;
+import com.zzezze.friendy.dtos.CommentDto;
 import com.zzezze.friendy.dtos.PhotoDeleteResponseDto;
 import com.zzezze.friendy.dtos.PhotoDetailDto;
 import com.zzezze.friendy.dtos.PhotosDto;
@@ -74,12 +75,15 @@ class PhotoControllerTest {
     @Test
     void detail() throws Exception {
         given(getPhotoDetailService.detail(1L))
-                .willReturn(new PhotoDetailDto(Photo.fake().toDto()));
+                .willReturn(PhotoDetailDto.fake());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/photos/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("\"photo\"")
+                ))
+                .andExpect(content().string(
+                        containsString("\"comments\"")
                 ));
     }
 
