@@ -1,9 +1,10 @@
 package com.zzezze.friendy.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.zzezze.friendy.dtos.CommentDto;
 import com.zzezze.friendy.models.value_objects.Content;
 import com.zzezze.friendy.models.value_objects.Nickname;
+import com.zzezze.friendy.models.value_objects.ParentId;
+import com.zzezze.friendy.models.value_objects.PhotoId;
 import com.zzezze.friendy.models.value_objects.ProfileImage;
 import com.zzezze.friendy.models.value_objects.Username;
 import jakarta.persistence.Embedded;
@@ -20,7 +21,11 @@ public class Comment {
     @GeneratedValue
     private Long id;
 
-    private Long parent;
+    @Embedded
+    private ParentId parentId;
+
+    @Embedded
+    private PhotoId photoId;
 
     @Embedded
     private Username username;
@@ -34,19 +39,35 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(Long id, Long parent, Username username, Content content) {
+    public Comment(Long id, ParentId parentId, PhotoId photoId, Username username, Content content, LocalDateTime createdAt) {
         this.id = id;
-        this.parent = parent;
+        this.parentId = parentId;
+        this.photoId = photoId;
+        this.username = username;
+        this.content = content;
+        this.createdAt = createdAt;
+    }
+
+    public Comment(Long id, ParentId parentId, PhotoId photoId, Username username, Content content) {
+        this.id = id;
+        this.parentId = parentId;
+        this.photoId = photoId;
         this.username = username;
         this.content = content;
     }
 
-    public Comment(Long id, Long parent, Username username, Content content, LocalDateTime createdAt) {
-        this.id = id;
-        this.parent = parent;
+    public Comment(PhotoId photoId, Username username, Content content) {
+        this.photoId = photoId;
         this.username = username;
         this.content = content;
-        this.createdAt = createdAt;
+    }
+
+    public static Comment of(PhotoId photoId, Username username, Content content) {
+        return new Comment(photoId, username, content);
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public Username getUsername() {
@@ -66,7 +87,8 @@ public class Comment {
     public static Comment fake() {
         return new Comment(
                 1L,
-                1L,
+                new ParentId(1L),
+                new PhotoId(1L),
                 new Username("test"),
                 new Content("댓글은 이렇게 달자")
         );

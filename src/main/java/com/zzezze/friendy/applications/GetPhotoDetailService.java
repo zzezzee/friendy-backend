@@ -7,6 +7,7 @@ import com.zzezze.friendy.exceptions.UserNotFound;
 import com.zzezze.friendy.models.Comment;
 import com.zzezze.friendy.models.Photo;
 import com.zzezze.friendy.models.User;
+import com.zzezze.friendy.models.value_objects.PhotoId;
 import com.zzezze.friendy.repositories.CommentRepository;
 import com.zzezze.friendy.repositories.PhotoRepository;
 import com.zzezze.friendy.repositories.UserRepository;
@@ -32,7 +33,7 @@ public class GetPhotoDetailService {
         Photo photo = photoRepository.findById(id)
                 .orElseThrow(PhotoNotFound::new);
 
-        List<Comment> comments = commentRepository.findAllByParent(id);
+        List<Comment> comments = commentRepository.findAllByPhotoId(new PhotoId(id));
 
         List<CommentDto> commentDtos = comments.stream()
                 .map(comment -> {

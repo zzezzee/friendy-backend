@@ -9,7 +9,7 @@ public class CommentDto {
     private String profileImage;
     private String nickname;
     private String content;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
 
     public CommentDto() {
