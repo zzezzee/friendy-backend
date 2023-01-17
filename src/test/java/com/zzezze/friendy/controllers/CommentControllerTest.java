@@ -1,6 +1,7 @@
 package com.zzezze.friendy.controllers;
 
 import com.zzezze.friendy.applications.CreateCommentService;
+import com.zzezze.friendy.applications.DeleteCommentService;
 import com.zzezze.friendy.dtos.CommentDto;
 import com.zzezze.friendy.models.GuestBook;
 import com.zzezze.friendy.models.value_objects.Content;
@@ -32,6 +33,9 @@ class CommentControllerTest {
     @MockBean
     private CreateCommentService createCommentService;
 
+    @MockBean
+    private DeleteCommentService deleteCommentService;
+
     @SpyBean
     private JwtUtil jwtUtil;
 
@@ -54,6 +58,24 @@ class CommentControllerTest {
                                 "\"photoId\":\"1\"" +
                                 "}"))
                 .andExpect(status().isCreated())
+                .andExpect(content().string(
+                        containsString("1")
+                ));
+    }
+
+    @Test
+    void delete() throws Exception {
+        Username username = new Username("test");
+
+        given(deleteCommentService.delete(username, 1L))
+                .willReturn(1L);
+
+        String token = jwtUtil.encode(username.getValue());
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/comments/1")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
                 .andExpect(content().string(
                         containsString("1")
                 ));
