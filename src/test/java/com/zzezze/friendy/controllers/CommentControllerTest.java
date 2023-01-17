@@ -1,0 +1,61 @@
+package com.zzezze.friendy.controllers;
+
+import com.zzezze.friendy.applications.CreateCommentService;
+import com.zzezze.friendy.dtos.CommentDto;
+import com.zzezze.friendy.models.GuestBook;
+import com.zzezze.friendy.models.value_objects.Content;
+import com.zzezze.friendy.models.value_objects.Nickname;
+import com.zzezze.friendy.models.value_objects.PhotoId;
+import com.zzezze.friendy.models.value_objects.ProfileImage;
+import com.zzezze.friendy.models.value_objects.Username;
+import com.zzezze.friendy.utils.JwtUtil;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@WebMvcTest(CommentController.class)
+class CommentControllerTest {
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private CreateCommentService createCommentService;
+
+    @SpyBean
+    private JwtUtil jwtUtil;
+
+    @Test
+    void create() throws Exception {
+        Username username = new Username("test");
+        PhotoId photoId = new PhotoId(1L);
+        Content content = new Content("댓글 내용");
+
+        given(createCommentService.create(username, photoId, content))
+                .willReturn(1L);
+
+        String token = jwtUtil.encode(username.getValue());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/comments")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{" +
+                                "\"content\":\"댓글 내용\"," +
+                                "\"photoId\":\"1\"" +
+                                "}"))
+                .andExpect(status().isCreated())
+                .andExpect(content().string(
+                        containsString("1")
+                ));
+    }
+}
