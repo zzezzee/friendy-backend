@@ -2,12 +2,11 @@ package com.zzezze.friendy.controllers;
 
 import com.zzezze.friendy.applications.CreateCommentService;
 import com.zzezze.friendy.applications.DeleteCommentService;
+import com.zzezze.friendy.applications.GetPhotoCommentsService;
 import com.zzezze.friendy.dtos.CommentDto;
-import com.zzezze.friendy.models.GuestBook;
+import com.zzezze.friendy.dtos.CommentsDto;
 import com.zzezze.friendy.models.value_objects.Content;
-import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.value_objects.PhotoId;
-import com.zzezze.friendy.models.value_objects.ProfileImage;
 import com.zzezze.friendy.models.value_objects.Username;
 import com.zzezze.friendy.utils.JwtUtil;
 import org.junit.jupiter.api.Test;
@@ -19,8 +18,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.List;
+
 import static org.hamcrest.Matchers.containsString;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,6 +32,9 @@ class CommentControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
+    private GetPhotoCommentsService getCommentsService;
+
+    @MockBean
     private CreateCommentService createCommentService;
 
     @MockBean
@@ -38,6 +42,18 @@ class CommentControllerTest {
 
     @SpyBean
     private JwtUtil jwtUtil;
+
+    @Test
+    void list() throws Exception {
+        given(getCommentsService.list(any()))
+                .willReturn(new CommentsDto(List.of(CommentDto.fake())));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/comments?photoId=1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("comments")
+                ));
+    }
 
     @Test
     void create() throws Exception {
