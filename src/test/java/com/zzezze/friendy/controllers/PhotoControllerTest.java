@@ -81,9 +81,6 @@ class PhotoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("\"photo\"")
-                ))
-                .andExpect(content().string(
-                        containsString("\"comments\"")
                 ));
     }
 

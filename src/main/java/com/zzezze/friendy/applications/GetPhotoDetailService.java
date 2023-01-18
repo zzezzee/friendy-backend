@@ -33,20 +33,8 @@ public class GetPhotoDetailService {
         Photo photo = photoRepository.findById(id)
                 .orElseThrow(PhotoNotFound::new);
 
-        List<Comment> comments = commentRepository.findAllByPhotoId(new PhotoId(id));
-
-        List<CommentDto> commentDtos = comments.stream()
-                .map(comment -> {
-                    User writer = userRepository.findByUsername(comment.getUsername())
-                            .orElseThrow(UserNotFound::new);
-
-                    return comment.toDto(writer.getProfileImage(), writer.getNickname());
-                })
-                .toList();
-
         return new PhotoDetailDto(
-                photo.toDto(),
-                commentDtos
+                photo.toDto()
         );
     }
 }
