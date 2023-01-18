@@ -2,11 +2,13 @@ package com.zzezze.friendy.controllers;
 
 import com.zzezze.friendy.applications.CreateCommentService;
 import com.zzezze.friendy.applications.DeleteCommentService;
-import com.zzezze.friendy.applications.GetPhotoCommentsService;
+import com.zzezze.friendy.applications.GetCommentsService;
+import com.zzezze.friendy.applications.PatchCommentService;
 import com.zzezze.friendy.dtos.CommentDto;
 import com.zzezze.friendy.dtos.CommentsDto;
 import com.zzezze.friendy.models.value_objects.Content;
-import com.zzezze.friendy.models.value_objects.PhotoId;
+import com.zzezze.friendy.models.value_objects.PostId;
+import com.zzezze.friendy.models.value_objects.PostType;
 import com.zzezze.friendy.models.value_objects.Username;
 import com.zzezze.friendy.utils.JwtUtil;
 import org.junit.jupiter.api.Test;
@@ -32,10 +34,13 @@ class CommentControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private GetPhotoCommentsService getCommentsService;
+    private GetCommentsService getCommentsService;
 
     @MockBean
     private CreateCommentService createCommentService;
+
+    @MockBean
+    private PatchCommentService patchCommentService;
 
     @MockBean
     private DeleteCommentService deleteCommentService;
@@ -48,7 +53,7 @@ class CommentControllerTest {
         given(getCommentsService.list(any()))
                 .willReturn(new CommentsDto(List.of(CommentDto.fake())));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/comments?photoId=1"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/comments?id=1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("comments")
@@ -58,10 +63,11 @@ class CommentControllerTest {
     @Test
     void create() throws Exception {
         Username username = new Username("test");
-        PhotoId photoId = new PhotoId(1L);
+        PostId postId = new PostId(1L);
+        PostType postType = new PostType("photo");
         Content content = new Content("댓글 내용");
 
-        given(createCommentService.create(username, photoId, content))
+        given(createCommentService.create(username, postId, postType, content))
                 .willReturn(1L);
 
         String token = jwtUtil.encode(username.getValue());
@@ -71,9 +77,32 @@ class CommentControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{" +
                                 "\"content\":\"댓글 내용\"," +
-                                "\"photoId\":\"1\"" +
+                                "\"postId\":\"1\"," +
+                                "\"postType\":\"photo\"" +
                                 "}"))
                 .andExpect(status().isCreated())
+                .andExpect(content().string(
+                        containsString("1")
+                ));
+    }
+
+    @Test
+    void patch() throws Exception {
+        Username username = new Username("test");
+
+        given(patchCommentService.patch(any(), any(), any()))
+                .willReturn(1L);
+
+        String token = jwtUtil.encode(username.getValue());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/comments")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{" +
+                                "\"content\":\"수정된 내용\"," +
+                                "\"id\":\"1\"" +
+                                "}"))
+                .andExpect(status().isNoContent())
                 .andExpect(content().string(
                         containsString("1")
                 ));

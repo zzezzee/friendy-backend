@@ -5,6 +5,8 @@ import com.zzezze.friendy.models.value_objects.Content;
 import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.value_objects.ParentId;
 import com.zzezze.friendy.models.value_objects.PhotoId;
+import com.zzezze.friendy.models.value_objects.PostId;
+import com.zzezze.friendy.models.value_objects.PostType;
 import com.zzezze.friendy.models.value_objects.ProfileImage;
 import com.zzezze.friendy.models.value_objects.Username;
 import jakarta.persistence.Embedded;
@@ -25,7 +27,10 @@ public class Comment {
     private ParentId parentId;
 
     @Embedded
-    private PhotoId photoId;
+    private PostId postId;
+
+    @Embedded
+    private PostType postType;
 
     @Embedded
     private Username username;
@@ -39,31 +44,33 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(Long id, ParentId parentId, PhotoId photoId, Username username, Content content, LocalDateTime createdAt) {
+    public Comment(Long id, ParentId parentId, PostId postId, PostType postType, Username username, Content content, LocalDateTime createdAt) {
         this.id = id;
         this.parentId = parentId;
-        this.photoId = photoId;
+        this.postId = postId;
+        this.postType = postType;
         this.username = username;
         this.content = content;
         this.createdAt = createdAt;
     }
 
-    public Comment(Long id, ParentId parentId, PhotoId photoId, Username username, Content content) {
-        this.id = id;
+    public Comment(ParentId parentId, PostId postId, PostType postType, Username username, Content content) {
         this.parentId = parentId;
-        this.photoId = photoId;
+        this.postId = postId;
+        this.postType = postType;
         this.username = username;
         this.content = content;
     }
 
-    public Comment(PhotoId photoId, Username username, Content content) {
-        this.photoId = photoId;
+    public Comment(PostId postId, PostType postType, Username username, Content content) {
+        this.postId = postId;
+        this.postType = postType;
         this.username = username;
         this.content = content;
     }
 
-    public static Comment of(PhotoId photoId, Username username, Content content) {
-        return new Comment(photoId, username, content);
+    public static Comment of(PostId postId, PostType postType, Username username, Content content) {
+        return new Comment(postId, postType, username, content);
     }
 
     public Long getId() {
@@ -72,6 +79,14 @@ public class Comment {
 
     public Username getUsername() {
         return username;
+    }
+
+    public Content getContent() {
+        return content;
+    }
+
+    public void changeContent(Content content) {
+        this.content = content;
     }
 
     public CommentDto toDto(ProfileImage profileImage, Nickname nickname) {
@@ -86,9 +101,9 @@ public class Comment {
 
     public static Comment fake() {
         return new Comment(
-                1L,
-                new ParentId(1L),
-                new PhotoId(1L),
+                null,
+                new PostId(1L),
+                new PostType("photo"),
                 new Username("test"),
                 new Content("댓글은 이렇게 달자")
         );

@@ -38,7 +38,7 @@ class GetPhotoDetailServiceTest {
         given(photoRepository.findById(1L))
                 .willReturn(Optional.of(Photo.fake()));
 
-        given(commentRepository.findAllByPhotoId(any()))
+        given(commentRepository.findAllByPostId(any()))
                 .willReturn(List.of(Comment.fake()));
 
         given(userRepository.findByUsername(any()))

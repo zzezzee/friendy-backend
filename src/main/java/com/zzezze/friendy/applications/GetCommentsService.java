@@ -5,7 +5,7 @@ import com.zzezze.friendy.dtos.CommentsDto;
 import com.zzezze.friendy.exceptions.UserNotFound;
 import com.zzezze.friendy.models.Comment;
 import com.zzezze.friendy.models.User;
-import com.zzezze.friendy.models.value_objects.PhotoId;
+import com.zzezze.friendy.models.value_objects.PostId;
 import com.zzezze.friendy.repositories.CommentRepository;
 import com.zzezze.friendy.repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -15,17 +15,17 @@ import java.util.List;
 
 @Service
 @Transactional
-public class GetPhotoCommentsService {
+public class GetCommentsService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
 
-    public GetPhotoCommentsService(CommentRepository commentRepository, UserRepository userRepository) {
+    public GetCommentsService(CommentRepository commentRepository, UserRepository userRepository) {
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
     }
 
-    public CommentsDto list(PhotoId id) {
-        List<Comment> comments = commentRepository.findAllByPhotoId(id);
+    public CommentsDto list(PostId id) {
+        List<Comment> comments = commentRepository.findAllByPostId(id);
 
         List<CommentDto> commentDtos = comments.stream()
                 .map(comment -> {
