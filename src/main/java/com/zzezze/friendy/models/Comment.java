@@ -1,10 +1,10 @@
 package com.zzezze.friendy.models;
 
 import com.zzezze.friendy.dtos.CommentDto;
+import com.zzezze.friendy.dtos.ReCommentDto;
 import com.zzezze.friendy.models.value_objects.Content;
 import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.value_objects.ParentId;
-import com.zzezze.friendy.models.value_objects.PhotoId;
 import com.zzezze.friendy.models.value_objects.PostId;
 import com.zzezze.friendy.models.value_objects.PostType;
 import com.zzezze.friendy.models.value_objects.ProfileImage;
@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Comment {
@@ -89,14 +90,19 @@ public class Comment {
         this.content = content;
     }
 
-    public CommentDto toDto(ProfileImage profileImage, Nickname nickname) {
+    public CommentDto toDto(ProfileImage profileImage, Nickname nickname, List<ReCommentDto> reCommentDto) {
         return new CommentDto(
                 id,
                 profileImage.getValue(),
                 nickname.getValue(),
                 content.getValue(),
+                reCommentDto,
                 createdAt
         );
+    }
+
+    public ReCommentDto toReCommentDto(ProfileImage profileImage, Nickname nickname) {
+        return new ReCommentDto(id, profileImage.getValue(), nickname.getValue(), content.getValue(), createdAt);
     }
 
     public static Comment fake() {
