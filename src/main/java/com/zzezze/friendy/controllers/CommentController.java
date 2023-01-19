@@ -1,13 +1,16 @@
 package com.zzezze.friendy.controllers;
 
 import com.zzezze.friendy.applications.CreateCommentService;
+import com.zzezze.friendy.applications.CreateReCommentService;
 import com.zzezze.friendy.applications.DeleteCommentService;
 import com.zzezze.friendy.applications.GetCommentsService;
 import com.zzezze.friendy.applications.PatchCommentService;
 import com.zzezze.friendy.dtos.CommentCreateDto;
 import com.zzezze.friendy.dtos.CommentEditDto;
 import com.zzezze.friendy.dtos.CommentsDto;
+import com.zzezze.friendy.dtos.ReCommentCreateDto;
 import com.zzezze.friendy.models.value_objects.Content;
+import com.zzezze.friendy.models.value_objects.ParentId;
 import com.zzezze.friendy.models.value_objects.PostId;
 import com.zzezze.friendy.models.value_objects.PostType;
 import com.zzezze.friendy.models.value_objects.Username;
@@ -31,12 +34,14 @@ public class CommentController {
     private final CreateCommentService createCommentService;
     private final PatchCommentService patchCommentService;
     private final DeleteCommentService deleteCommentService;
+    private final CreateReCommentService createReCommentService;
 
-    public CommentController(GetCommentsService getCommentsService, CreateCommentService createCommentService, PatchCommentService patchCommentService, DeleteCommentService deleteCommentService) {
+    public CommentController(GetCommentsService getCommentsService, CreateCommentService createCommentService, PatchCommentService patchCommentService, DeleteCommentService deleteCommentService, CreateReCommentService createReCommentService) {
         this.getCommentsService = getCommentsService;
         this.createCommentService = createCommentService;
         this.patchCommentService = patchCommentService;
         this.deleteCommentService = deleteCommentService;
+        this.createReCommentService = createReCommentService;
     }
 
     @GetMapping
@@ -59,6 +64,22 @@ public class CommentController {
         Content content = new Content(commentCreateDto.getContent());
 
         Long id = createCommentService.create(username, postId, postType, content);
+
+        return id;
+    }
+
+    @PostMapping("reply")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Long createReComment(
+            @RequestAttribute("username") Username username,
+            @RequestBody ReCommentCreateDto reCommentCreateDto
+    ) {
+        PostId postId = new PostId(reCommentCreateDto.getPostId());
+        PostType postType = new PostType(reCommentCreateDto.getPostType());
+        Content content = new Content(reCommentCreateDto.getContent());
+        ParentId parentId = new ParentId(reCommentCreateDto.getParentId());
+
+        Long id = createReCommentService.create(username, postId, postType, content, parentId);
 
         return id;
     }
