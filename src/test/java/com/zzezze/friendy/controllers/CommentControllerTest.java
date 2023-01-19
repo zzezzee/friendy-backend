@@ -95,7 +95,7 @@ class CommentControllerTest {
 
         String token = jwtUtil.encode(username.getValue());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/comments")
+        mockMvc.perform(MockMvcRequestBuilders.patch("/comments/1")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{" +
