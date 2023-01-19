@@ -74,6 +74,11 @@ public class Comment {
         return new Comment(postId, postType, username, content);
     }
 
+    public static Comment of(PostId postId, PostType postType, Username username, Content content, ParentId parentId) {
+        return new Comment(parentId, postId, postType, username, content);
+    }
+
+
     public Long getId() {
         return id;
     }

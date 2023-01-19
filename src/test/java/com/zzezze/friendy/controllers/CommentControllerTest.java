@@ -1,12 +1,14 @@
 package com.zzezze.friendy.controllers;
 
 import com.zzezze.friendy.applications.CreateCommentService;
+import com.zzezze.friendy.applications.CreateReCommentService;
 import com.zzezze.friendy.applications.DeleteCommentService;
 import com.zzezze.friendy.applications.GetCommentsService;
 import com.zzezze.friendy.applications.PatchCommentService;
 import com.zzezze.friendy.dtos.CommentDto;
 import com.zzezze.friendy.dtos.CommentsDto;
 import com.zzezze.friendy.models.value_objects.Content;
+import com.zzezze.friendy.models.value_objects.ParentId;
 import com.zzezze.friendy.models.value_objects.PostId;
 import com.zzezze.friendy.models.value_objects.PostType;
 import com.zzezze.friendy.models.value_objects.Username;
@@ -44,6 +46,9 @@ class CommentControllerTest {
 
     @MockBean
     private DeleteCommentService deleteCommentService;
+
+    @MockBean
+    private CreateReCommentService createReCommentService;
 
     @SpyBean
     private JwtUtil jwtUtil;
@@ -85,6 +90,35 @@ class CommentControllerTest {
                         containsString("1")
                 ));
     }
+
+    @Test
+    void createReComment() throws Exception {
+        Username username = new Username("test");
+        PostId postId = new PostId(1L);
+        PostType postType = new PostType("photo");
+        Content content = new Content("댓글 내용");
+        ParentId parentId = new ParentId(1L);
+
+        given(createReCommentService.create(username, postId, postType, content, parentId))
+                .willReturn(1L);
+
+        String token = jwtUtil.encode(username.getValue());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/comments/reply")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{" +
+                                "\"content\":\"댓글 내용\"," +
+                                "\"postId\":\"1\"," +
+                                "\"postType\":\"photo\"," +
+                                "\"parentId\":\"1\"" +
+                                "}"))
+                .andExpect(status().isCreated())
+                .andExpect(content().string(
+                        containsString("1")
+                ));
+    }
+
 
     @Test
     void patch() throws Exception {
