@@ -12,17 +12,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class GetUserService {
     private final UserRepository userRepository;
-    private final RelationshipRepository relationshipRepository;
+    private final DiscriminateRelationshipService discriminateRelationshipService;
 
-    public GetUserService(UserRepository userRepository, RelationshipRepository relationshipRepository) {
+    public GetUserService(UserRepository userRepository, DiscriminateRelationshipService discriminateRelationshipService) {
         this.userRepository = userRepository;
-        this.relationshipRepository = relationshipRepository;
+        this.discriminateRelationshipService = discriminateRelationshipService;
     }
 
     public UserRelationShipDto detail(Username username, Nickname nickname) {
@@ -32,44 +31,11 @@ public class GetUserService {
         User owner = userRepository.findByNickname(nickname)
                 .orElseThrow(UserNotFound::new);
 
-        String relation = discriminate(visitor, owner);
+        String relation = discriminateRelationshipService.discriminate(visitor, owner);
 
         return new UserRelationShipDto(
                 visitor.getNickname().getValue(),
                 relation
         );
-    }
-
-    public String discriminate(User visitor, User owner) {
-        Username visitorUsername = visitor.getUsername();
-        Username ownerUsername = owner.getUsername();
-
-        if (visitorUsername.equals(ownerUsername)) {
-            return "me";
-        }
-
-        List<Long> visitorRelationshipId
-                = relationshipRepository.findAllBySenderOrReceiver(visitorUsername, visitorUsername)
-                .stream()
-                .map(Relationship::getId)
-                .toList();
-
-        List<Long> ownerRelationshipId
-                = relationshipRepository.findAllBySenderOrReceiver(ownerUsername, ownerUsername)
-                .stream()
-                .map(Relationship::getId)
-                .toList();
-
-        int size = visitorRelationshipId
-                .stream()
-                .filter(ownerRelationshipId::contains)
-                .toList()
-                .size();
-
-        if(size == 1){
-            return "friend";
-        }
-
-        return "stranger";
     }
 }
