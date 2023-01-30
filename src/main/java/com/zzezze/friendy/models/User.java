@@ -1,6 +1,7 @@
 package com.zzezze.friendy.models;
 
 import com.zzezze.friendy.dtos.UserDto;
+import com.zzezze.friendy.dtos.UserExploreDto;
 import com.zzezze.friendy.models.value_objects.Introduction;
 import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.value_objects.Password;
@@ -14,6 +15,7 @@ import jakarta.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -103,6 +105,16 @@ public class User {
                 nickname.getValue(),
                 profileImage.getValue(),
                 introduction.getValue()
+        );
+    }
+
+    public UserExploreDto toExploreDto(List<User> userFriendsTogether) {
+        return new UserExploreDto(
+                id,
+                nickname.getValue(),
+                profileImage.getValue(),
+                introduction.getValue(),
+                userFriendsTogether
         );
     }
 }
