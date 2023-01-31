@@ -8,6 +8,7 @@ import com.zzezze.friendy.dtos.UserProfilePatchRequestDto;
 import com.zzezze.friendy.dtos.UserDto;
 import com.zzezze.friendy.dtos.UserRelationShipDto;
 import com.zzezze.friendy.dtos.UsersDto;
+import com.zzezze.friendy.dtos.UsersExploreDto;
 import com.zzezze.friendy.models.value_objects.Introduction;
 import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.value_objects.ProfileImage;
@@ -64,10 +65,10 @@ public class UserController {
     }
 
     @GetMapping
-    public UsersDto list() {
-        UsersDto usersDto = getUsersService.list();
-
-        return usersDto;
+    public UsersExploreDto list(
+            @RequestAttribute("username") Username username
+            ) {
+        return getUsersService.list(username);
     }
 
     @PatchMapping

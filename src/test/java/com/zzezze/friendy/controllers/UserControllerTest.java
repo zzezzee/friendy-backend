@@ -6,6 +6,7 @@ import com.zzezze.friendy.applications.GetUsersService;
 import com.zzezze.friendy.applications.PatchUserProfileService;
 import com.zzezze.friendy.dtos.UserRelationShipDto;
 import com.zzezze.friendy.dtos.UsersDto;
+import com.zzezze.friendy.dtos.UsersExploreDto;
 import com.zzezze.friendy.models.User;
 import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.value_objects.Username;
@@ -107,10 +108,16 @@ class UserControllerTest {
 
     @Test
     void list() throws Exception {
-        given(getUsersService.list())
-                .willReturn(new UsersDto(List.of(User.fake().toDto())));
+        Username username = new Username("test");
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/users"))
+//        given(getUsersService.list(username))
+//                .willReturn(new UsersExploreDto((List.of(User.fake().toExploreDto(any())));
+
+        String token = jwtUtil.encode(username.getValue());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/users")
+                        .header("Authorization", "Bearer " + token)
+                )
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("\"users\"")
