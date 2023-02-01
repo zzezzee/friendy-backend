@@ -24,6 +24,12 @@ public class ChatRoom {
     public ChatRoom() {
     }
 
+    public ChatRoom(Long id, Username host, Username guest) {
+        this.id = id;
+        this.host = host;
+        this.guest = guest;
+    }
+
     public Long getId() {
         return id;
     }
@@ -36,8 +42,20 @@ public class ChatRoom {
         return guest;
     }
 
+    public boolean containsMember(Username username) {
+        if(!host.equals(username) && !guest.equals(username)){
+            return false;
+        }
+
+        return true;
+    }
+
     public static ChatRoom fake() {
-        return new ChatRoom();
+        return new ChatRoom(
+                1L,
+                new Username("test1"),
+                new Username("test2")
+        );
     }
 
     public ChatRoomDto toDto() {
