@@ -3,9 +3,12 @@ package com.zzezze.friendy.applications;
 import com.zzezze.friendy.dtos.ChatRoomDto;
 import com.zzezze.friendy.dtos.ChatRoomsDto;
 import com.zzezze.friendy.exceptions.UserNotFound;
+import com.zzezze.friendy.models.Chat;
 import com.zzezze.friendy.models.ChatRoom;
 import com.zzezze.friendy.models.User;
+import com.zzezze.friendy.models.value_objects.ChatRoomId;
 import com.zzezze.friendy.models.value_objects.Username;
+import com.zzezze.friendy.repositories.ChatRepository;
 import com.zzezze.friendy.repositories.ChatRoomRepository;
 import com.zzezze.friendy.repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -19,10 +22,12 @@ import java.util.List;
 public class GetChatRoomsService {
     private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
+    private final ChatRepository chatRepository;
 
-    public GetChatRoomsService(ChatRoomRepository chatRoomRepository, UserRepository userRepository) {
+    public GetChatRoomsService(ChatRoomRepository chatRoomRepository, UserRepository userRepository, ChatRepository chatRepository) {
         this.chatRoomRepository = chatRoomRepository;
         this.userRepository = userRepository;
+        this.chatRepository = chatRepository;
     }
 
     public ChatRoomsDto list(Username username) {
@@ -34,10 +39,14 @@ public class GetChatRoomsService {
         chatRoomsCreatedByMe.forEach(chatRoom -> {
                     User opponent = userRepository.findByUsername(chatRoom.getGuest()).orElseThrow(UserNotFound::new);
 
+                    List<Chat> chats = chatRepository.findByChatRoomId(new ChatRoomId(chatRoom.getId()));
+
                     chatRoomDtos.add(new ChatRoomDto(
                             chatRoom.getId(),
                             opponent.getProfileImage().getValue(),
-                            opponent.getNickname().getValue()
+                            opponent.getNickname().getValue(),
+                            chats.get(chats.size() - 1).getContent().getValue(),
+                            chats.get(chats.size() - 1).getCreatedAt()
                     ));
                 }
         );
@@ -45,10 +54,14 @@ public class GetChatRoomsService {
         chatRoomsInvitedByOther.forEach(chatRoom -> {
                     User opponent = userRepository.findByUsername(chatRoom.getHost()).orElseThrow(UserNotFound::new);
 
+                    List<Chat> chats = chatRepository.findByChatRoomId(new ChatRoomId(chatRoom.getId()));
+
                     chatRoomDtos.add(new ChatRoomDto(
                             chatRoom.getId(),
                             opponent.getProfileImage().getValue(),
-                            opponent.getNickname().getValue()
+                            opponent.getNickname().getValue(),
+                            chats.get(chats.size() - 1).getContent().getValue(),
+                            chats.get(chats.size() - 1).getCreatedAt()
                     ));
                 }
         );

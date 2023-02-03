@@ -16,7 +16,7 @@ class GetChatRoomsServiceTest {
     void setup() {
         chatRoomRepository = mock(ChatRoomRepository.class);
         userRepository = mock(UserRepository.class);
-        getChatRoomsService = new GetChatRoomsService(chatRoomRepository, userRepository);
+        getChatRoomsService = new GetChatRoomsService(chatRoomRepository, userRepository, chatRepository);
     }
 
     @Test
