@@ -36,6 +36,12 @@ public class Chat {
     public Chat() {
     }
 
+    public Chat(ChatRoomId chatRoomId, Username sender, Content content) {
+        this.chatRoomId = chatRoomId;
+        this.sender = sender;
+        this.content = content;
+    }
+
     public Chat(Long id, ChatRoomId chatRoomId, Username sender, Content content, LocalDateTime createdAt) {
         this.id = id;
         this.chatRoomId = chatRoomId;
@@ -44,8 +50,16 @@ public class Chat {
         this.createdAt = createdAt;
     }
 
+    public Content getContent() {
+        return content;
+    }
+
     public Username getSender() {
         return sender;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     public static Chat fake() {
@@ -64,7 +78,7 @@ public class Chat {
                 profileImage.getValue(),
                 nickname.getValue(),
                 content.getValue(),
-                createdAt
+                createdAt == null ? LocalDateTime.now() : createdAt
         );
     }
 }

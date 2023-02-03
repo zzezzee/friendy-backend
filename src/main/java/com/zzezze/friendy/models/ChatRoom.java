@@ -1,13 +1,14 @@
 package com.zzezze.friendy.models;
 
 import com.zzezze.friendy.dtos.ChatRoomDto;
-import com.zzezze.friendy.models.value_objects.ProfileImage;
 import com.zzezze.friendy.models.value_objects.Username;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+
+import java.time.LocalDateTime;
 
 @Entity
 public class ChatRoom {
@@ -62,6 +63,8 @@ public class ChatRoom {
         return new ChatRoomDto(
                 id,
                 "image_address",
-                "nickname");
+                "nickname",
+                "최근채팅",
+                LocalDateTime.now());
     }
 }
