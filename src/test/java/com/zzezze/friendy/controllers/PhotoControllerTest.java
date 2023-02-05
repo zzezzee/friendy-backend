@@ -2,10 +2,13 @@ package com.zzezze.friendy.controllers;
 
 import com.zzezze.friendy.applications.CreatePhotoService;
 import com.zzezze.friendy.applications.DeletePhotoService;
+import com.zzezze.friendy.applications.GetFriendsPhotosService;
 import com.zzezze.friendy.applications.GetPhotoDetailService;
 import com.zzezze.friendy.applications.GetPhotosService;
 import com.zzezze.friendy.applications.PatchPhotoService;
 import com.zzezze.friendy.dtos.CommentDto;
+import com.zzezze.friendy.dtos.FriendsPhotoDto;
+import com.zzezze.friendy.dtos.FriendsPhotosDto;
 import com.zzezze.friendy.dtos.PhotoDeleteResponseDto;
 import com.zzezze.friendy.dtos.PhotoDetailDto;
 import com.zzezze.friendy.dtos.PhotosDto;
@@ -52,6 +55,9 @@ class PhotoControllerTest {
 
     @MockBean
     private DeletePhotoService deletePhotoService;
+
+    @MockBean
+    private GetFriendsPhotosService getFriendsPhotosService;
 
     @SpyBean
     private JwtUtil jwtUtil;
@@ -146,6 +152,23 @@ class PhotoControllerTest {
                 .andExpect(status().isNoContent())
                 .andExpect(content().string(
                         containsString("\"image\"")
+                ));
+    }
+
+    @Test
+    void friendsPhotos() throws Exception {
+        Username username = new Username("test");
+
+        given(getFriendsPhotosService.list(username))
+                .willReturn(new FriendsPhotosDto(List.of(FriendsPhotoDto.fake())));
+
+        String token = jwtUtil.encode(username.getValue());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/photos/friends")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("\"friendsPhotos\"")
                 ));
     }
 }

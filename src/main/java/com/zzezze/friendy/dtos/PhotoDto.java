@@ -1,5 +1,9 @@
 package com.zzezze.friendy.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.time.LocalDateTime;
+
 public class PhotoDto {
     private Long id;
 
@@ -7,13 +11,17 @@ public class PhotoDto {
 
     private String explanation;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd HH:mm", timezone = "Asia/Seoul")
+    private LocalDateTime createdAt;
+
     public PhotoDto() {
     }
 
-    public PhotoDto(Long id, String image, String explanation) {
+    public PhotoDto(Long id, String image, String explanation, LocalDateTime createdAt) {
         this.id = id;
         this.image = image;
         this.explanation = explanation;
+        this.createdAt = createdAt;
     }
 
     public Long getId() {
@@ -26,5 +34,9 @@ public class PhotoDto {
 
     public String getExplanation() {
         return explanation;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 }
