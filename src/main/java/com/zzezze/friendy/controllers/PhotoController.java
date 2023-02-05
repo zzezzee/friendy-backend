@@ -2,6 +2,7 @@ package com.zzezze.friendy.controllers;
 
 import com.zzezze.friendy.applications.CreatePhotoService;
 import com.zzezze.friendy.applications.DeletePhotoService;
+import com.zzezze.friendy.applications.GetFriendsPhotosService;
 import com.zzezze.friendy.applications.GetPhotoDetailService;
 import com.zzezze.friendy.applications.GetPhotosService;
 import com.zzezze.friendy.applications.PatchPhotoService;
@@ -11,6 +12,7 @@ import com.zzezze.friendy.dtos.PhotoDto;
 import com.zzezze.friendy.dtos.PhotoPatchRequestDto;
 import com.zzezze.friendy.dtos.PhotoRegistrationDto;
 import com.zzezze.friendy.dtos.PhotosDto;
+import com.zzezze.friendy.dtos.FriendsPhotosDto;
 import com.zzezze.friendy.models.value_objects.Explanation;
 import com.zzezze.friendy.models.value_objects.Image;
 import com.zzezze.friendy.models.value_objects.Nickname;
@@ -40,15 +42,17 @@ public class PhotoController {
     private final CreatePhotoService createPhotoService;
     private final DeletePhotoService deletePhotoService;
     private final PatchPhotoService patchPhotoService;
+    private GetFriendsPhotosService getFriendsPhotosService;
 
     private final S3Uploader s3Uploader;
 
-    public PhotoController(GetPhotosService getPhotosService, GetPhotoDetailService getPhotoDetailService, CreatePhotoService createPhotoService, DeletePhotoService deletePhotoService, PatchPhotoService patchPhotoService, S3Uploader s3Uploader) {
+    public PhotoController(GetPhotosService getPhotosService, GetPhotoDetailService getPhotoDetailService, CreatePhotoService createPhotoService, DeletePhotoService deletePhotoService, PatchPhotoService patchPhotoService, GetFriendsPhotosService getFriendsPhotosService, S3Uploader s3Uploader) {
         this.getPhotosService = getPhotosService;
         this.getPhotoDetailService = getPhotoDetailService;
         this.createPhotoService = createPhotoService;
         this.deletePhotoService = deletePhotoService;
         this.patchPhotoService = patchPhotoService;
+        this.getFriendsPhotosService = getFriendsPhotosService;
         this.s3Uploader = s3Uploader;
     }
 
@@ -94,7 +98,7 @@ public class PhotoController {
         Image image = new Image(photoEditRequestDto.getImage());
         Explanation explanation = new Explanation(photoEditRequestDto.getExplanation());
 
-        PhotoDto photoDto= patchPhotoService.patch(username, id, image, explanation);
+        PhotoDto photoDto = patchPhotoService.patch(username, id, image, explanation);
 
         return photoDto;
     }
@@ -105,9 +109,16 @@ public class PhotoController {
             @RequestAttribute("username") Username username,
             @PathVariable Long id
     ) {
-        PhotoDeleteResponseDto photoDeleteResponseDto= deletePhotoService.delete(username, id);
+        PhotoDeleteResponseDto photoDeleteResponseDto = deletePhotoService.delete(username, id);
 
         return photoDeleteResponseDto;
+    }
+
+    @GetMapping("friends")
+    public FriendsPhotosDto list(
+            @RequestAttribute("username") Username username
+    ) {
+        return getFriendsPhotosService.list(username);
     }
 
     @PostMapping("upload")

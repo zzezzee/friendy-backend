@@ -4,11 +4,13 @@ import com.zzezze.friendy.dtos.PhotoDto;
 import com.zzezze.friendy.models.value_objects.Explanation;
 import com.zzezze.friendy.models.value_objects.Image;
 import com.zzezze.friendy.models.value_objects.Username;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 public class Photo {
@@ -25,6 +27,9 @@ public class Photo {
     @Embedded
     private Explanation explanation;
 
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
     public Photo() {
     }
 
@@ -39,6 +44,10 @@ public class Photo {
         this.username = username;
         this.image = image;
         this.explanation = explanation;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public void change(Image image, Explanation explanation) {
@@ -59,8 +68,8 @@ public class Photo {
         return new PhotoDto(
                 id,
                 image.getValue(),
-                explanation.getValue()
-        );
+                explanation.getValue(),
+                createdAt);
     }
 
     public Username getUsername() {

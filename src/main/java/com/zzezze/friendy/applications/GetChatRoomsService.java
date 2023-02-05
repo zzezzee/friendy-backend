@@ -2,6 +2,7 @@ package com.zzezze.friendy.applications;
 
 import com.zzezze.friendy.dtos.ChatRoomDto;
 import com.zzezze.friendy.dtos.ChatRoomsDto;
+import com.zzezze.friendy.exceptions.ChatNotFound;
 import com.zzezze.friendy.exceptions.UserNotFound;
 import com.zzezze.friendy.models.Chat;
 import com.zzezze.friendy.models.ChatRoom;
@@ -39,14 +40,15 @@ public class GetChatRoomsService {
         chatRoomsCreatedByMe.forEach(chatRoom -> {
                     User opponent = userRepository.findByUsername(chatRoom.getGuest()).orElseThrow(UserNotFound::new);
 
-                    List<Chat> chats = chatRepository.findByChatRoomId(new ChatRoomId(chatRoom.getId()));
+                    Chat chat = chatRepository.findTopByChatRoomIdOrderByCreatedAtDesc(new ChatRoomId(chatRoom.getId()))
+                            .orElseThrow(ChatNotFound::new);
 
                     chatRoomDtos.add(new ChatRoomDto(
                             chatRoom.getId(),
                             opponent.getProfileImage().getValue(),
                             opponent.getNickname().getValue(),
-                            chats.get(chats.size() - 1).getContent().getValue(),
-                            chats.get(chats.size() - 1).getCreatedAt()
+                            chat.getContent().getValue(),
+                            chat.getCreatedAt()
                     ));
                 }
         );
@@ -54,19 +56,18 @@ public class GetChatRoomsService {
         chatRoomsInvitedByOther.forEach(chatRoom -> {
                     User opponent = userRepository.findByUsername(chatRoom.getHost()).orElseThrow(UserNotFound::new);
 
-                    List<Chat> chats = chatRepository.findByChatRoomId(new ChatRoomId(chatRoom.getId()));
+                    Chat chat = chatRepository.findTopByChatRoomIdOrderByCreatedAtDesc(new ChatRoomId(chatRoom.getId()))
+                            .orElseThrow(ChatNotFound::new);
 
                     chatRoomDtos.add(new ChatRoomDto(
                             chatRoom.getId(),
                             opponent.getProfileImage().getValue(),
                             opponent.getNickname().getValue(),
-                            chats.get(chats.size() - 1).getContent().getValue(),
-                            chats.get(chats.size() - 1).getCreatedAt()
+                            chat.getContent().getValue(),
+                            chat.getCreatedAt()
                     ));
                 }
         );
-
-        //TODO: 채팅방의 가장 최근 채팅을 DTO에 넣어서 보내기
 
         return new ChatRoomsDto(chatRoomDtos);
     }
