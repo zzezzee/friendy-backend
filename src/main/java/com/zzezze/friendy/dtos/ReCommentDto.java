@@ -10,7 +10,6 @@ public class ReCommentDto {
     private String nickname;
     private String content;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
 
     public ReCommentDto() {
