@@ -6,7 +6,11 @@ import com.zzezze.friendy.dtos.UserDto;
 import com.zzezze.friendy.exceptions.UserNotFound;
 import com.zzezze.friendy.models.Photo;
 import com.zzezze.friendy.models.User;
+import com.zzezze.friendy.models.value_objects.PhotoId;
+import com.zzezze.friendy.models.value_objects.PostId;
 import com.zzezze.friendy.models.value_objects.Username;
+import com.zzezze.friendy.repositories.CommentRepository;
+import com.zzezze.friendy.repositories.LikeRepository;
 import com.zzezze.friendy.repositories.PhotoRepository;
 import com.zzezze.friendy.repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -20,12 +24,16 @@ import java.util.List;
 public class GetFriendsPhotosService {
     private final UserRepository userRepository;
     private final GetRelationshipService getRelationshipService;
-    private PhotoRepository photoRepository;
+    private final PhotoRepository photoRepository;
+    private final CommentRepository commentRepository;
+    private final LikeRepository likeRepository;
 
-    public GetFriendsPhotosService(UserRepository userRepository, GetRelationshipService getRelationshipService, PhotoRepository photoRepository) {
+    public GetFriendsPhotosService(UserRepository userRepository, GetRelationshipService getRelationshipService, PhotoRepository photoRepository, CommentRepository commentRepository, LikeRepository likeRepository) {
         this.userRepository = userRepository;
         this.getRelationshipService = getRelationshipService;
         this.photoRepository = photoRepository;
+        this.commentRepository = commentRepository;
+        this.likeRepository = likeRepository;
     }
 
     public FriendsPhotosDto list(Username username) {
@@ -43,11 +51,16 @@ public class GetFriendsPhotosService {
             List<Photo> photos = photoRepository.findAllByUsername(friend.getUsername());
 
             photos.stream().forEach(photo -> {
+                Long commentsCount = (long) commentRepository.findAllByPostId(new PostId(photo.getId())).size();
+                Long likeCount = (long) likeRepository.findAllByPhotoId(new PhotoId(photo.getId())).size();
+
                 friendsPhotoDtos.add(
                         new FriendsPhotoDto(
                                 photo.toDto(),
                                 friend.getProfileImage().getValue(),
-                                friend.getNickname().getValue()
+                                friend.getNickname().getValue(),
+                                commentsCount,
+                                likeCount
                         )
                 );
             });

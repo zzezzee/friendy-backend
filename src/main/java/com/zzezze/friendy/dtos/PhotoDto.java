@@ -11,7 +11,6 @@ public class PhotoDto {
 
     private String explanation;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
 
     public PhotoDto() {

@@ -14,7 +14,6 @@ public class CommentDto {
 
     private List<ReCommentDto> reComments;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
 
     public CommentDto() {
