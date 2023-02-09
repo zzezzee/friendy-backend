@@ -49,6 +49,10 @@ public class GuestBook {
         return new GuestBook(username, writer, content);
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public Username getUsername() {
         return username;
     }

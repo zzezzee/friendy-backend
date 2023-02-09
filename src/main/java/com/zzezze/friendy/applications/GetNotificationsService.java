@@ -1,5 +1,6 @@
 package com.zzezze.friendy.applications;
 
+import com.zzezze.friendy.applications.dtos.InvitationNotificationDto;
 import com.zzezze.friendy.dtos.LikeNotificationDto;
 import com.zzezze.friendy.dtos.NotificationsDto;
 import com.zzezze.friendy.dtos.PhotoCommentNotificationDto;
@@ -9,6 +10,7 @@ import com.zzezze.friendy.exceptions.UserNotFound;
 import com.zzezze.friendy.models.Comment;
 import com.zzezze.friendy.models.Photo;
 import com.zzezze.friendy.models.User;
+import com.zzezze.friendy.models.notifications.InvitationNotification;
 import com.zzezze.friendy.models.notifications.LikeNotification;
 import com.zzezze.friendy.models.notifications.PhotoCommentNotification;
 import com.zzezze.friendy.models.value_objects.Type;
@@ -43,6 +45,9 @@ public class GetNotificationsService {
 
         List<LikeNotification> likeNotifications
                 = notificationRepository.findAllLikeNotificationByUsernameAndType(username, new Type("Like"));
+
+        List<InvitationNotification> invitationNotifications
+                = notificationRepository.findAllInvitationNotificationsByUsernameAndType(username, new Type("SendInvitation"), new Type("AcceptInvitation"));
 
         List <PhotoCommentNotificationDto> photoCommentNotificationDtos
                 = photoCommentNotifications
@@ -79,6 +84,22 @@ public class GetNotificationsService {
                 })
                 .toList();
 
-        return new NotificationsDto(photoCommentNotificationDtos, likeNotificationDtos);
+        List <InvitationNotificationDto> invitationNotificationDtos
+                = invitationNotifications
+                .stream()
+                .map(invitationNotification -> {
+                    User sender = userRepository.findByUsername(invitationNotification.getSender())
+                            .orElseThrow(UserNotFound::new);
+
+                    return invitationNotification.toDto(
+                            sender.getNickname(),
+                            sender.getProfileImage());
+                })
+                .toList();
+
+        return new NotificationsDto(
+                photoCommentNotificationDtos,
+                likeNotificationDtos,
+                invitationNotificationDtos);
     }
 }

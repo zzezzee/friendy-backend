@@ -151,4 +151,14 @@ public class BackdoorController {
 
         return "OK";
     }
+
+    @GetMapping("/delete-notifications")
+    public String deleteNotifications() {
+        jdbcTemplate.execute("DELETE FROM invitation_notification");
+        jdbcTemplate.execute("DELETE FROM like_notification");
+        jdbcTemplate.execute("DELETE FROM photo_comment_notification");
+        jdbcTemplate.execute("DELETE FROM notification");
+
+        return "OK";
+    }
 }
