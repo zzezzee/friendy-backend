@@ -6,14 +6,14 @@ import jakarta.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class PostId {
-    @Column(name = "post_id")
+public class CommentId {
+    @Column(name="comment_id")
     private Long value;
 
-    public PostId() {
+    public CommentId() {
     }
 
-    public PostId(Long value) {
+    public CommentId(Long value) {
         this.value = value;
     }
 
@@ -25,8 +25,8 @@ public class PostId {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PostId postId = (PostId) o;
-        return Objects.equals(value, postId.value);
+        CommentId photoId = (CommentId) o;
+        return Objects.equals(value, photoId.value);
     }
 
     @Override

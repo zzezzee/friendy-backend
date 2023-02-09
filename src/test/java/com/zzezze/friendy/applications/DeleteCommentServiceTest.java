@@ -22,7 +22,7 @@ class DeleteCommentServiceTest {
     @BeforeEach
     void setup() {
         commentRepository = mock(CommentRepository.class);
-        deleteCommentService = new DeleteCommentService(commentRepository);
+        deleteCommentService = new DeleteCommentService(commentRepository, notificationRepository, photoCommentNotificationRepository);
     }
 
     @Test

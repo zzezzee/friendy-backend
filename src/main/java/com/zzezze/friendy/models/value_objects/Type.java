@@ -6,18 +6,18 @@ import jakarta.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class PostId {
-    @Column(name = "post_id")
-    private Long value;
+public class Type {
+    @Column(name = "notification_type")
+    private String value;
 
-    public PostId() {
+    public Type() {
     }
 
-    public PostId(Long value) {
+    public Type(String value) {
         this.value = value;
     }
 
-    public Long getValue() {
+    public String getValue() {
         return value;
     }
 
@@ -25,8 +25,8 @@ public class PostId {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PostId postId = (PostId) o;
-        return Objects.equals(value, postId.value);
+        Type type = (Type) o;
+        return Objects.equals(value, type.value);
     }
 
     @Override

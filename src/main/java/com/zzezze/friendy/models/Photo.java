@@ -64,15 +64,19 @@ public class Photo {
         );
     }
 
+    public Username getUsername() {
+        return username;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
     public PhotoDto toDto() {
         return new PhotoDto(
                 id,
                 image.getValue(),
                 explanation.getValue(),
                 createdAt);
-    }
-
-    public Username getUsername() {
-        return username;
     }
 }
