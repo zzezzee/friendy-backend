@@ -1,4 +1,4 @@
-package com.zzezze.friendy.repositories;
+package com.zzezze.friendy.repositories.notifications;
 
 import com.zzezze.friendy.dtos.PhotoCommentNotificationDto;
 import com.zzezze.friendy.models.notifications.Notification;

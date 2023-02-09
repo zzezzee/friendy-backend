@@ -8,8 +8,8 @@ import com.zzezze.friendy.models.notifications.PhotoCommentNotification;
 import com.zzezze.friendy.models.value_objects.CommentId;
 import com.zzezze.friendy.models.value_objects.Username;
 import com.zzezze.friendy.repositories.CommentRepository;
-import com.zzezze.friendy.repositories.NotificationRepository;
-import com.zzezze.friendy.repositories.PhotoCommentNotificationRepository;
+import com.zzezze.friendy.repositories.notifications.NotificationRepository;
+import com.zzezze.friendy.repositories.notifications.PhotoCommentNotificationRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 

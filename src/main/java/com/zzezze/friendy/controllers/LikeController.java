@@ -1,5 +1,6 @@
 package com.zzezze.friendy.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zzezze.friendy.applications.PatchLikeService;
 import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.value_objects.PhotoId;
@@ -27,7 +28,7 @@ public class LikeController {
     public void patch(
             @RequestAttribute("username") Username username,
             @RequestParam Long photoId
-    ) {
+    ) throws JsonProcessingException {
         patchLikeService.patch(username, new PhotoId(photoId));
     }
 }

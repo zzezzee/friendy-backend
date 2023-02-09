@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @Embeddable
 public class Type {
-    @Column(name = "notification_type")
+    @Column(name = "type")
     private String value;
 
     public Type() {
