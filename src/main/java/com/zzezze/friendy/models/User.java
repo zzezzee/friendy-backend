@@ -54,6 +54,10 @@ public class User {
         this.introduction = introduction;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public Username getUsername() {
         return username;
     }

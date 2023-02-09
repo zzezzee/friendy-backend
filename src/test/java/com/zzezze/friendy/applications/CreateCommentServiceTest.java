@@ -8,7 +8,6 @@ import com.zzezze.friendy.repositories.CommentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -20,7 +19,7 @@ class CreateCommentServiceTest {
     @BeforeEach
     void setup() {
         commentRepository = mock(CommentRepository.class);
-        createCommentService = new CreateCommentService(commentRepository);
+        createCommentService = new CreateCommentService(commentRepository, notificationService, photoRepository);
     }
 
     @Test

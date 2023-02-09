@@ -1,5 +1,6 @@
 package com.zzezze.friendy.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zzezze.friendy.applications.CreateCommentService;
 import com.zzezze.friendy.applications.CreateReCommentService;
 import com.zzezze.friendy.applications.DeleteCommentService;
@@ -58,7 +59,7 @@ public class CommentController {
     public Long create(
             @RequestAttribute("username") Username username,
             @RequestBody CommentCreateDto commentCreateDto
-    ) {
+    ) throws JsonProcessingException {
         PostId postId = new PostId(commentCreateDto.getPostId());
         PostType postType = new PostType(commentCreateDto.getPostType());
         Content content = new Content(commentCreateDto.getContent());
