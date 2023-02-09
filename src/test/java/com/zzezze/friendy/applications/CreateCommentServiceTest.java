@@ -19,7 +19,7 @@ class CreateCommentServiceTest {
     @BeforeEach
     void setup() {
         commentRepository = mock(CommentRepository.class);
-        createCommentService = new CreateCommentService(commentRepository, notificationService, photoRepository);
+        createCommentService = new CreateCommentService(commentRepository, notificationService, photoRepository, userRepository);
     }
 
     @Test
@@ -29,7 +29,7 @@ class CreateCommentServiceTest {
         PostType postType = new PostType("photo");
         Content content = new Content("댓글 내용");
 
-        createCommentService.create(username, postId, postType, content);
+        createCommentService.create(username, postId, postType, content, nickname);
 
         verify(commentRepository).save(any());
     }

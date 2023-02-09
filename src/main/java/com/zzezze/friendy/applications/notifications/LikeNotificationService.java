@@ -3,14 +3,12 @@ package com.zzezze.friendy.applications.notifications;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.zzezze.friendy.dtos.PhotoCommentNotificationDto;
+import com.zzezze.friendy.dtos.LikeNotificationDto;
 import com.zzezze.friendy.exceptions.UserNotFound;
-import com.zzezze.friendy.models.Comment;
 import com.zzezze.friendy.models.Photo;
 import com.zzezze.friendy.models.User;
+import com.zzezze.friendy.models.notifications.LikeNotification;
 import com.zzezze.friendy.models.notifications.Notification;
-import com.zzezze.friendy.models.notifications.PhotoCommentNotification;
-import com.zzezze.friendy.models.value_objects.CommentId;
 import com.zzezze.friendy.models.value_objects.PhotoId;
 import com.zzezze.friendy.models.value_objects.Type;
 import com.zzezze.friendy.models.value_objects.Username;
@@ -28,32 +26,31 @@ import java.util.Map;
 
 @Service
 @Transactional
-public class PhotoCommentNotificationService {
+public class LikeNotificationService {
     private final EmitterRepository emitterRepository;
     private final UserRepository userRepository;
     private final NotificationRepository notificationRepository;
 
-    public PhotoCommentNotificationService(EmitterRepository emitterRepository, UserRepository userRepository,
-                                           NotificationRepository notificationRepository) {
+    public LikeNotificationService(EmitterRepository emitterRepository, UserRepository userRepository,
+                                   NotificationRepository notificationRepository) {
         this.emitterRepository = emitterRepository;
         this.userRepository = userRepository;
         this.notificationRepository = notificationRepository;
     }
 
-    public void sendNotification(Username sender, Username receiver, Photo photo, Comment comment) throws JsonProcessingException {
-        PhotoCommentNotification photoCommentNotification = new PhotoCommentNotification(
+    public void sendNotification(Username sender, Username receiver, Photo photo) throws JsonProcessingException {
+        LikeNotification likeNotification = new LikeNotification(
                 sender,
                 receiver,
-                new Type("photoComment"),
-                new PhotoId(photo.getId()),
-                new CommentId(comment.getId())
+                new Type("Like"),
+                new PhotoId(photo.getId())
         );
 
-        PhotoCommentNotification notification = notificationRepository.save(photoCommentNotification);
+        LikeNotification notification = notificationRepository.save(likeNotification);
 
         Map<Username, SseEmitter> sseEmitters = emitterRepository.findByUsername(receiver);
 
-        String data = transferToDto(notification, photo, comment);
+        String data = transferToDto(notification, photo);
 
         sseEmitters.forEach(
                 (key, emitter) -> {
@@ -74,19 +71,18 @@ public class PhotoCommentNotificationService {
         }
     }
 
-    private String transferToDto(Notification notification, Photo photo, Comment comment) throws JsonProcessingException {
+    private String transferToDto(Notification notification, Photo photo) throws JsonProcessingException {
         User sender = userRepository.findByUsername(notification.getSender())
                 .orElseThrow(UserNotFound::new);
 
-        PhotoCommentNotificationDto photoCommentNotificationDto =
-                new PhotoCommentNotificationDto(
+        LikeNotificationDto likeNotificationDto =
+                new LikeNotificationDto(
                         notification.getId(),
                         notification.isChecked(),
                         LocalDateTime.now(),
                         photo.getId(),
                         sender.getNickname().getValue(),
                         photo.getImage().getValue(),
-                        comment.getContent().getValue(),
                         notification.getType().getValue()
                 );
 
@@ -95,6 +91,6 @@ public class PhotoCommentNotificationService {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(simpleModule);
 
-        return objectMapper.writeValueAsString(photoCommentNotificationDto);
+        return objectMapper.writeValueAsString(likeNotificationDto);
     }
 }

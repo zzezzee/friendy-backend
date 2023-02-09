@@ -24,7 +24,7 @@ class DeletePhotoServiceTest {
     void setup() {
         photoRepository = mock(PhotoRepository.class);
         userRepository = mock(UserRepository.class);
-        deletePhotoService = new DeletePhotoService(photoRepository, userRepository, photoCommentNotificationRepository, notificationRepository);
+        deletePhotoService = new DeletePhotoService(photoRepository, userRepository, photoCommentNotificationRepository, notificationRepository, likeNotificationRepository);
     }
 
     @Test

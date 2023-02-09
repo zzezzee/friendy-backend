@@ -1,5 +1,6 @@
 package com.zzezze.friendy.applications;
 
+import com.zzezze.friendy.dtos.LikeNotificationDto;
 import com.zzezze.friendy.dtos.NotificationsDto;
 import com.zzezze.friendy.dtos.PhotoCommentNotificationDto;
 import com.zzezze.friendy.exceptions.CommentNotFound;
@@ -8,10 +9,12 @@ import com.zzezze.friendy.exceptions.UserNotFound;
 import com.zzezze.friendy.models.Comment;
 import com.zzezze.friendy.models.Photo;
 import com.zzezze.friendy.models.User;
+import com.zzezze.friendy.models.notifications.LikeNotification;
 import com.zzezze.friendy.models.notifications.PhotoCommentNotification;
+import com.zzezze.friendy.models.value_objects.Type;
 import com.zzezze.friendy.models.value_objects.Username;
 import com.zzezze.friendy.repositories.CommentRepository;
-import com.zzezze.friendy.repositories.NotificationRepository;
+import com.zzezze.friendy.repositories.notifications.NotificationRepository;
 import com.zzezze.friendy.repositories.PhotoRepository;
 import com.zzezze.friendy.repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -36,7 +39,10 @@ public class GetNotificationsService {
 
     public NotificationsDto list(Username username) {
         List<PhotoCommentNotification> photoCommentNotifications
-                = notificationRepository.findAllPhotoCommentNotificationByUsername(username);
+                = notificationRepository.findAllPhotoCommentNotificationByUsernameAndType(username, new Type("photoComment"));
+
+        List<LikeNotification> likeNotifications
+                = notificationRepository.findAllLikeNotificationByUsernameAndType(username, new Type("Like"));
 
         List <PhotoCommentNotificationDto> photoCommentNotificationDtos
                 = photoCommentNotifications
@@ -57,6 +63,22 @@ public class GetNotificationsService {
                 })
                 .toList();
 
-        return new NotificationsDto(photoCommentNotificationDtos);
+        List <LikeNotificationDto> likeNotificationDtos
+                = likeNotifications
+                .stream()
+                .map(likeNotification -> {
+                    User sender = userRepository.findByUsername(likeNotification.getSender())
+                            .orElseThrow(UserNotFound::new);
+                    Photo photo = photoRepository.findById(likeNotification.getPhotoId().getValue())
+                            .orElseThrow(PhotoNotFound::new);
+
+                    return likeNotification.toDto(
+                            photo.getId(),
+                            sender.getNickname(),
+                            photo.getImage());
+                })
+                .toList();
+
+        return new NotificationsDto(photoCommentNotificationDtos, likeNotificationDtos);
     }
 }

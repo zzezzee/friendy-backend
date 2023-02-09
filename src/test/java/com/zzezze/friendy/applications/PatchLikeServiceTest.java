@@ -1,14 +1,11 @@
 package com.zzezze.friendy.applications;
 
-import com.zzezze.friendy.models.Like;
+import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.value_objects.PhotoId;
 import com.zzezze.friendy.models.value_objects.Username;
 import com.zzezze.friendy.repositories.LikeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.security.core.parameters.P;
-
-import javax.sound.midi.Patch;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -22,7 +19,7 @@ class PatchLikeServiceTest {
     @BeforeEach
     void setup() {
         likeRepository = mock(LikeRepository.class);
-        patchLikeService = new PatchLikeService(likeRepository);
+        patchLikeService = new PatchLikeService(likeRepository, notificationService, userRepsoitory, photoRepository, notificationRepository);
     }
 
     @Test
@@ -33,7 +30,7 @@ class PatchLikeServiceTest {
         given(likeRepository.existsByPhotoIdAndUsername(photoId, username))
                 .willReturn(true);
 
-        patchLikeService.patch(username, photoId);
+        patchLikeService.patch(username, photoId, new Nickname(miniHomepageOwner));
 
         verify(likeRepository).deleteByPhotoIdAndUsername(photoId, username);
     }
@@ -46,7 +43,7 @@ class PatchLikeServiceTest {
         given(likeRepository.existsByPhotoIdAndUsername(photoId, username))
                 .willReturn(false);
 
-        patchLikeService.patch(username, photoId);
+        patchLikeService.patch(username, photoId, new Nickname(miniHomepageOwner));
 
         verify(likeRepository).save(any());
     }

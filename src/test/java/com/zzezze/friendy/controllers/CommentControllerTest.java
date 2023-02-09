@@ -72,7 +72,7 @@ class CommentControllerTest {
         PostType postType = new PostType("photo");
         Content content = new Content("댓글 내용");
 
-        given(createCommentService.create(username, postId, postType, content))
+        given(createCommentService.create(username, postId, postType, content, nickname))
                 .willReturn(1L);
 
         String token = jwtUtil.encode(username.getValue());

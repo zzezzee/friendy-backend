@@ -11,6 +11,7 @@ import com.zzezze.friendy.dtos.CommentEditDto;
 import com.zzezze.friendy.dtos.CommentsDto;
 import com.zzezze.friendy.dtos.ReCommentCreateDto;
 import com.zzezze.friendy.models.value_objects.Content;
+import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.value_objects.ParentId;
 import com.zzezze.friendy.models.value_objects.PostId;
 import com.zzezze.friendy.models.value_objects.PostType;
@@ -63,8 +64,9 @@ public class CommentController {
         PostId postId = new PostId(commentCreateDto.getPostId());
         PostType postType = new PostType(commentCreateDto.getPostType());
         Content content = new Content(commentCreateDto.getContent());
+        Nickname nickname = new Nickname(commentCreateDto.getMiniHomepageOwner());
 
-        Long id = createCommentService.create(username, postId, postType, content);
+        Long id = createCommentService.create(username, postId, postType, content, nickname);
 
         return id;
     }
