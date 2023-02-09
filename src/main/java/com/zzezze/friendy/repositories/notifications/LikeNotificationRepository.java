@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface LikeNotificationRepository extends JpaRepository<LikeNotification, Long> {
-
     Optional<LikeNotification> findByPhotoId(PhotoId photoId);
 
     void deleteByPhotoId(PhotoId photoId);

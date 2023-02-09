@@ -19,7 +19,7 @@ class CreateCommentServiceTest {
     @BeforeEach
     void setup() {
         commentRepository = mock(CommentRepository.class);
-        createCommentService = new CreateCommentService(commentRepository, notificationService, photoRepository, userRepository);
+        createCommentService = new CreateCommentService(commentRepository, notificationService, photoRepository, userRepository, guestBookRepository, guestBookCommentNotificationService);
     }
 
     @Test

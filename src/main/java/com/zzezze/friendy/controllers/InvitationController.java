@@ -1,5 +1,6 @@
 package com.zzezze.friendy.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zzezze.friendy.applications.AcceptInvitationService;
 import com.zzezze.friendy.applications.CancelInvitationService;
 import com.zzezze.friendy.applications.CreateInvitationService;
@@ -48,7 +49,7 @@ public class InvitationController {
     public UserDto create(
             @RequestAttribute("username") Username username,
             @RequestParam Nickname nickname
-            ) {
+            ) throws JsonProcessingException {
         return createInvitationService.create(username, nickname);
     }
 

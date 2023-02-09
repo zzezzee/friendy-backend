@@ -25,7 +25,7 @@ class CancelInvitationServiceTest {
     void setup() {
         invitationRepository = mock(InvitationRepository.class);
         userRepository = mock(UserRepository.class);
-        deleteInvitationService = new CancelInvitationService(invitationRepository, userRepository);
+        deleteInvitationService = new CancelInvitationService(invitationRepository, userRepository, invitationNotificationRepository);
     }
 
     @Test

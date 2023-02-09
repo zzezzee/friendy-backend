@@ -1,7 +1,6 @@
 package com.zzezze.friendy.applications;
 
 import com.zzezze.friendy.dtos.UserDto;
-import com.zzezze.friendy.models.Invitation;
 import com.zzezze.friendy.models.User;
 import com.zzezze.friendy.models.value_objects.Nickname;
 import com.zzezze.friendy.models.value_objects.Username;
@@ -12,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -27,7 +25,7 @@ class CreateInvitationServiceTest {
     void setup() {
         invitationRepository = mock(InvitationRepository.class);
         userRepository = mock(UserRepository.class);
-        createInvitationService = new CreateInvitationService(invitationRepository, userRepository);
+        createInvitationService = new CreateInvitationService(invitationRepository, userRepository, notificationService);
     }
 
     @Test
