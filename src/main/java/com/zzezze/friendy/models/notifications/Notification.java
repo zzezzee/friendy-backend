@@ -55,6 +55,10 @@ public class Notification {
         return sender;
     }
 
+    public Username getReceiver() {
+        return receiver;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -65,5 +69,9 @@ public class Notification {
 
     public Type getType() {
         return type;
+    }
+
+    public void check() {
+        this.checked = true;
     }
 }
