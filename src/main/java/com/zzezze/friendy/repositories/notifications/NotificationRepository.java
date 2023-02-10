@@ -41,4 +41,11 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     List<InvitationNotification> findAllInvitationNotificationsByUsernameAndType(@Param("receiver") Username username,
                                                                                  @Param("type1") Type type1,
                                                                                  @Param("type2") Type type2);
+
+
+    void deleteAllByReceiver(Username username);
+
+    List<Notification> findAllByReceiver(Username username);
+
+    void deleteAllByReceiverAndChecked(Username username, boolean b);
 }
